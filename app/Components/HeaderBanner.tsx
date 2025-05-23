@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
+import { MdManageAccounts } from "react-icons/md";
+import { IoIosHeart } from "react-icons/io";
 
 const HeaderBanner = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,16 +18,23 @@ const HeaderBanner = () => {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md" : "bg-transparent"
+        isScrolled ? "bg-white shadow-md" : "bg-white shadow-md"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 py-0 grid grid-cols-8 items-center gap-4">
+      <div className="text-sm bg-gray-100 flex flex-row justify-end text-gray-700 px-6 "> 
+        <div className="border border-gray-200 p-1 flex flex-row items-center gap-1" > <MdManageAccounts /> Account</div>
+        <div className="border border-gray-200 p-1" > Blog </div>
+        <div className="border border-gray-200 p-1" > Help </div>
+        <div className="border border-gray-200 p-1" > Email sign up </div>
+        <div className="border border-gray-200 p-1" > Language </div>
+      </div>
+      <div className="max-w-7xl text-sm py-1 mx-auto px-4  grid grid-cols-8 items-center gap-4">
         {/* Logo */}
         <div className="col-span-2">
           <img
             src="https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png"
             alt="MyLogo"
-            className="h-12 w-auto rounded-lg"
+            className="h-8 w-auto rounded-lg"
           />
         </div>
 
@@ -35,7 +44,7 @@ const HeaderBanner = () => {
             {["Nam", "Nữ", "Áo", "Quần"].map((label) => (
               <li
                 key={label}
-                className="hover:border-b-4 hover:border-gray-300 py-4 transition duration-200 transform hover:scale-105"
+                className="hover:border-b-4 hover:border-gray-300 py-2 transition duration-200 transform hover:scale-105"
               >
                 <a
                   href="#"
@@ -49,7 +58,7 @@ const HeaderBanner = () => {
         </nav>
 
         {/* Search Bar */}
-        <form className="col-span-2 bg-white p-4 rounded-lg">
+        <form className="col-span-2 bg-white px-4 rounded-lg">
           <label
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only"
@@ -105,6 +114,11 @@ const HeaderBanner = () => {
             color="black"
             className="hover:cursor-pointer hover:scale-110 transition-transform duration-200"
           />
+          <IoIosHeart
+            size={25}
+            color="black"
+            className="hover:cursor-pointer hover:scale-110 transition-transform duration-200"
+           />
         </div>
       </div>
     </header>
