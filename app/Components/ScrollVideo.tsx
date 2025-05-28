@@ -1,7 +1,27 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import supabase  from "utils/supabase"; // Ensure this points to your Supabase client
 
 const ScrollVideo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+
+useEffect(() => {
+  const fetchVideoUrl = async () => {
+    const { data } = supabase
+      .storage
+      .from("videos")
+      .getPublicUrl("GAPZ-2-0418.mp4");
+
+    if (data && data.publicUrl) {
+      setVideoUrl(data.publicUrl);
+    } else {
+      console.error("Failed to get public URL");
+    }
+  };
+
+  fetchVideoUrl();
+}, []);
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -15,9 +35,7 @@ const ScrollVideo: React.FC = () => {
           video.pause();
         }
       },
-      {
-        threshold: 0.5, // Play when 50% of the video is visible
-      }
+      { threshold: 0.5 }
     );
 
     if (videoRef.current) {
@@ -29,22 +47,24 @@ const ScrollVideo: React.FC = () => {
         observer.unobserve(videoRef.current);
       }
     };
-  }, []);
+  }, [videoUrl]);
 
   return (
-    <>
     <div className="w-full max-w-4xl mx-auto p-4">
-      <video
-        ref={videoRef}
-        src="/videos/GAPZ-2-0418.mp4"
-        muted
-        loop
-        playsInline
-        className="w-full rounded-lg shadow-lg"
-        controls={false}
-      />
+      {videoUrl ? (
+        <video
+          ref={videoRef}
+          src={videoUrl}
+          muted
+          loop
+          playsInline
+          className="w-full rounded-lg shadow-lg"
+          controls={false}
+        />
+      ) : (
+        <p>Loading video...</p>
+      )}
     </div>
-    </>
   );
 };
 

@@ -5,11 +5,17 @@ const carouselImages = [
   "https://i.ibb.co/233WdTrh/Gapz-Empowering-Greatness-1.png",
 ];
 
+const carouselImagesMobile = [
+  "https://i.ibb.co/hFq76h2S/1.png",
+  "https://i.ibb.co/0RtKvMnR/2.png",
+];
+
 export default function HomeCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const delay = 4000; // 4 seconds
+  const delay = 4000;
 
   const resetTimeout = () => {
     if (timeoutRef.current) {
@@ -18,27 +24,44 @@ export default function HomeCarousel() {
   };
 
   useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
+
+  const images = isMobile ? carouselImagesMobile : carouselImages;
+
+  useEffect(() => {
     resetTimeout();
     timeoutRef.current = setTimeout(() => {
       setCurrentIndex((prevIndex) =>
-        prevIndex === carouselImages.length - 1 ? 0 : prevIndex + 1
+        prevIndex === images.length - 1 ? 0 : prevIndex + 1
       );
     }, delay);
 
     return () => {
       resetTimeout();
     };
-  }, [currentIndex]);
+  }, [currentIndex, images.length]);
 
   return (
-    <div className="relative overflow-hidden w-full bg-white p-4">
+    <div className="relative overflow-hidden w-full bg-white md:p-4">
       <div
         className="flex transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {carouselImages.map((src, idx) => (
+        {images.map((src, idx) => (
           <div className="min-w-full flex-shrink-0" key={idx}>
-            <img src={src} className="w-screen h-auto object-cover rounded-lg" />
+            <img
+              src={src}
+              className="w-screen h-auto object-cover "
+              alt={`carousel-${idx}`}
+            />
           </div>
         ))}
       </div>

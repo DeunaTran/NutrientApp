@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
 import { MdManageAccounts } from "react-icons/md";
 import { IoIosHeart } from "react-icons/io";
 
 const HeaderBanner = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,21 +19,30 @@ const HeaderBanner = () => {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md" : "bg-white shadow-md"
+        isScrolled ? "bg-white shadow-md" : ""
       }`}
     >
-      <div className="text-sm bg-gray-100 flex flex-row justify-end text-gray-700 px-6 "> 
-        <div className="border border-gray-200 p-1 flex flex-row items-center gap-1" > <MdManageAccounts /> Account</div>
-        <div className="border border-gray-200 p-1" > Blog </div>
-        <div className="border border-gray-200 p-1" > Help </div>
-        <div className="border border-gray-200 p-1" > Email sign up </div>
-        <div className="border border-gray-200 p-1" > Language </div>
+      {/* Top Bar - Desktop Only */}
+      <div className="hidden md:flex text-sm bg-gray-100 justify-end text-gray-700 px-6">
+        <div className="border border-gray-200 p-1 flex items-center gap-1">
+          <MdManageAccounts /> Account
+        </div>
+        <div className="border border-gray-200 p-1">Blog</div>
+        <div className="border border-gray-200 p-1">Help</div>
+        <div className="border border-gray-200 p-1">Email sign up</div>
+        <div className="border border-gray-200 p-1">Language</div>
       </div>
-      <div className="max-w-7xl text-sm py-1 mx-auto px-4  grid grid-cols-8 items-center gap-4">
+
+      {/* Desktop Main Header */}
+      <div className="hidden md:grid max-w-7xl text-sm py-1 mx-auto px-4 grid-cols-8 items-center gap-4">
         {/* Logo */}
         <div className="col-span-2">
           <img
-            src="https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png"
+            src={
+              isScrolled
+                ? "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
+                : "https://i.ibb.co/d0sN71VG/dsa.png"         // Logo when NOT scrolled
+            }
             alt="MyLogo"
             className="h-8 w-auto rounded-lg"
           />
@@ -57,21 +67,13 @@ const HeaderBanner = () => {
           </ul>
         </nav>
 
-        {/* Search Bar */}
-        <form className="col-span-2 bg-white px-4 rounded-lg">
-          <label
-            htmlFor="default-search"
-            className="mb-2 text-sm font-medium text-gray-900 sr-only"
-          >
-            Search
-          </label>
+        {/* Search Bar - Hidden on mobile */}
+        <form className="col-span-2  px-4 rounded-lg hidden md:block">
           <div className="relative">
             <input
               type="search"
-              id="default-search"
-              className="block w-full p-2 pl-10 text-sm text-black border border-gray-300 rounded-lg bg-white"
               placeholder="Search..."
-              required
+              className="block w-full p-2 pl-10 text-sm text-black bg-white rounded-lg"
             />
             <button
               type="submit"
@@ -96,30 +98,55 @@ const HeaderBanner = () => {
           </div>
         </form>
 
-        {/* Cart Icon */}
-        <div className="col-span-1 flex justify-start items-center space-x-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24"
-            width="24"
-            viewBox="0 0 6.35 6.35"
-            fill="black"
-            className="hover:cursor-pointer hover:scale-110 transition-transform duration-200"
-          >
-            <path d="M 3.1708661,3.2974124 C 1.907863,3.2997936 0.86304935,4.299744 0.79995125,5.5634239 A 0.26460945,0.26460945 0 0 0 1.0655682,5.8404096 H 5.2864993 A 0.26460945,0.26460945 0 0 0 5.5500489,5.5634239 C 5.48687,4.2981438 4.4396051,3.2975523 3.1750001,3.2974124 Z" />
-            <path d="m 3.1750901,0.5095872 c -0.669506,0 -1.2153281,0.54839 -1.2153321,1.21864 -1.9e-6,0.6702501 0.5458221,1.2205301 1.2153321,1.2205301 0.6695099,0 1.217222,-0.55028 1.2172191,-1.2205301 -4e-6,-0.67025 -0.5477132,-1.21864 -1.2172191,-1.21864 z" />
-          </svg>
+
+        {/* Icons - Hidden on mobile */}
+        <div className="col-span-1 hidden md:flex justify-start items-center space-x-4">
           <FaShoppingCart
+            color="gray"
             size={25}
-            color="black"
             className="hover:cursor-pointer hover:scale-110 transition-transform duration-200"
           />
           <IoIosHeart
+            color="gray"
             size={25}
-            color="black"
             className="hover:cursor-pointer hover:scale-110 transition-transform duration-200"
-           />
+          />
         </div>
+
+      </div>
+
+      {/* Mobile Header */}
+      <div className="md:hidden flex flex-col px-4 py-2 shadow-md bg-transparent">
+        {/* Top Row: Logo + Hamburger */}
+        <div className="flex justify-between items-center mb-2">
+          <img
+            src={
+              isScrolled
+                ? "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
+                : "https://i.ibb.co/d0sN71VG/dsa.png"         // Logo when NOT scrolled
+            }
+            alt="MyLogo"
+            className="h-8 w-auto"
+          />
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <FaTimes color="gray" size={22} /> : <FaBars color="gray" size={22} />}
+          </button>
+        </div>
+
+        {/* Mobile Nav Menu */}
+        {mobileMenuOpen && (
+          <nav className="flex flex-col items-center space-y-2 mt-2 bg-gray-100 p-4 rounded-lg">
+            {["Nam", "Nữ", "Áo", "Quần"].map((label) => (
+              <a
+                key={label}
+                href="#"
+                className="text-black font-medium py-1 px-2 border rounded-sm w-full text-center"
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+        )}
       </div>
     </header>
   );

@@ -2,57 +2,10 @@ import HeaderBanner from "~/Components/HeaderBanner";
 import HomeCarousel from "~/Components/HomeCarousel";
 
 
-// export function meta({}: Route.MetaArgs) {
-//   return [
-//     { title: "New React Router App" },
-//     { name: "description", content: "Welcome to React Router!" },
-//   ];
-// }
-
-// const sampleProduct = {
-//   id: 1,
-//   name: "Intro to Artificial Intelligence",
-//   serial: "CS501",
-//   textBook: "Russell & Norvig (3rd Edition)",
-//   conclusion: "Covers intelligent agents, search, knowledge, and learning.",
-//   duration: 15,
-// };
-
-// export default function Home() {
-//   const [productSaveList, setProductSaveList] = useState<Array<string | number>>([]);
-
-//   const handleSaveProduct = (id: string | number) => {
-//     setProductSaveList((prev) => [...prev, id]);
-//   };
-
-//   const handleUnSaveProduct = (id: string | number) => {
-//     setProductSaveList((prev) => prev.filter((pid) => pid !== id));
-//   };
-
-//   return (
-//     <div className="bg-white">
-//       <HeaderBanner />
-//       <HomeCarousel />
-
-//       <div className="mt-4 px-4">
-//         <ProductCard
-//           product={sampleProduct}
-//           productSaveList={productSaveList}
-//           handleSaveProduct={handleSaveProduct}
-//           handleUnSaveProduct={handleUnSaveProduct}
-//         />
-//       </div>
-//     </div>
-//   );
-// }
-
-
 import { useState } from "react";
 import ProductList from "../Components/ProductList";
-import { ImGrin2 } from "react-icons/im";
 import ScrollVideo from "~/Components/ScrollVideo";
 import ScrollVideo2 from "~/Components/ScrollVideo2";
-import ScrollVideo3 from "~/Components/ScrollVideo3";
 import Footer from "~/Components/Footer";
 
 
@@ -95,7 +48,7 @@ export default function Home() {
     <div className="bg-white">
       <HeaderBanner />
       <HomeCarousel />
-      <div className="grid grid-cols-4 gap-4 mt-4 px-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 px-4">
         <ProductList
           products={products}
           productSaveList={productSaveList}
@@ -104,7 +57,6 @@ export default function Home() {
         />
       </div>
       <ScrollVideo/>
-      <ScrollVideo3/>
       <ScrollVideo2/>
       <Footer/>
     </div>
