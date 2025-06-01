@@ -1,64 +1,162 @@
 import HeaderBanner from "~/Components/HeaderBanner";
 import HomeCarousel from "~/Components/HomeCarousel";
 
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductList from "../Components/ProductList";
 import ScrollVideo from "~/Components/ScrollVideo";
 import ScrollVideo2 from "~/Components/ScrollVideo2";
 import Footer from "~/Components/Footer";
+import supabase from "utils/supabase";
+import Authenticate from "~/Components/Authenticate";
+import { type Product } from "~/library/interface";
 
 
-const products = [
-  {
-    id: 1,
-    name: "Quần Short Nam Thể Thao", 
-    sale: "Giảm giá 50%",
-    price: "200.000đ",
-    img: "https://i.ibb.co/LdqM1mPh/z6616912695609-22155da151bb1f019b0de90c95-1.jpg",
-    img2: "https://i.ibb.co/TB5p5Mw8/z6616912878639-3b8f3e70ee0618a129e6bb97537cbbb3.jpg",   
-    discription: "Quần thể thao cao cấp, thoáng mát, thấm hút mồ hôi",
-  },
-  {
-    id: 2,
-    name: "Áo Thun Nam Basic",
-    sale: "Giảm giá 30%",
-    price: "150.000đ",  
+interface UserProfile {
+  cart: Record<string, any>; // or a more specific type if you know cart shape
+  created_at: string;
+  user_id: string;
+}
 
-    img: "https://i.postimg.cc/PrVrytfb/z6626644819163-1ee5280a965f0df4f3a2e7de00b02e7e-1.jpg",
-    // img2: "https://i.ibb.co/TqMrk0jc/sdf.jpg",
-    img2: "https://i.postimg.cc/SNBHk5gF/z6620247367397-db3c171475d9b86f46110c730e5eae81.jpg",
 
-    discription: "Áo thun basic, dễ phối đồ, chất liệu cotton",
-  },
-];
 
 export default function Home() {
-  const [productSaveList, setProductSaveList] = useState<Array<string | number>>([]);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [profile, setProfile] = useState<UserProfile | null>({
+    cart: {},
+    created_at: "",
+    user_id: "",
+  }); 
+  const [loadingProfile, setLoadingProfile] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [cart, setCart] = useState<Record<string | number, number>>({});
 
-  const handleSave = (id: string | number) => {
-    setProductSaveList((prev) => [...prev, id]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  const fetchProducts = async () => {
+    setLoadingProducts(true);
+    const { data, error } = await supabase
+      .from("Product") // Adjust table name if different
+      .select("*");
+
+    if (error) {
+      console.error("Error fetching products:", error.message);
+    } else {
+      setProducts(data);
+    }
+    setLoadingProducts(false);
   };
 
-  const handleUnsave = (id: string | number) => {
-    setProductSaveList((prev) => prev.filter((pid) => pid !== id));
+
+  const handleAddToCart = async (id: string | number) => {
+    if (!profile) return;
+
+    const updatedCart = {
+      ...(profile.cart || {}),
+      [id]: 1, // or you can use true or a quantity
+    };
+
+    const { error } = await supabase
+      .from("Profile")
+      .update({ cart: updatedCart })
+      .eq("user_id", profile.user_id);
+
+    if (error) {
+      console.error("Error updating cart:", error.message);
+      return;
+    }
+
+    setProfile({ ...profile, cart: updatedCart }); // update local state
+    console.log("Product added to cart:", id);
+    fetchProfile(profile.user_id); // Refresh profile to get updated cart
+    setCart(updatedCart); // Update local cart state
   };
 
+
+  const handleRemoveFromCart = async (id: string | number) => {
+    if (!profile) return;
+
+    const updatedCart = { ...(profile.cart || {}) };
+    delete updatedCart[id];
+
+    const { error } = await supabase
+      .from("Profile")
+      .update({ cart: updatedCart })
+      .eq("user_id", profile.user_id);
+
+    if (error) {
+      console.error("Error removing from cart:", error.message);
+      return;
+    }
+
+    setProfile({ ...profile, cart: updatedCart }); // update local state
+    console.log("Product removed from cart:", id);
+    fetchProfile(profile.user_id); // Refresh profile to get updated cart
+    setCart(updatedCart); // Update local cart state
+  };
+
+  useEffect(() => {
+    fetchProducts(); // Always fetch product list on load
+    if(!isAuthenticated) {
+      // Check if user is authenticated on initial load
+      supabase.auth.getUser().then(({ data }) => {
+        if (data.user) {
+          setIsAuthenticated(true);
+          fetchProfile(data.user.id);
+          console.log("User is logged in:", data.user);
+        } else {
+          console.log("No user is logged in.");
+          setProfile({
+            cart: {},
+            created_at: "",
+            user_id: "",
+          });
+        }
+      });
+    }
+    // Check if user is authenticated on initial load 
+  }, [isAuthenticated]);
+  
+
+  // Function to fetch Profile from supabase
+  const fetchProfile = async (userId: string) => {
+    setLoadingProfile(true);
+    const { data, error } = await supabase
+      .from("Profile")
+      .select("*") // or select('role, cart, ...') if you want specific columns
+      .eq("user_id", userId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching profile:", error); // Reset profile if there's an error
+      
+    } else {
+      setProfile(data);
+      setCart(data.cart || {}); // Ensure cart is set from profile
+      console.log("Profile fetched successfully:", data);
+    }
+    setLoadingProfile(false);
+  };
+
+
+  
   return (
     <div className="bg-white">
-      <HeaderBanner />
+      <HeaderBanner isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} />
+      <Authenticate isOpen={authOpen} onClose={() => setAuthOpen(false)} />
       <HomeCarousel />
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 px-4">
         <ProductList
-          products={products}
-          productSaveList={productSaveList}
-          onSave={handleSave}
-          onUnsave={handleUnsave}
-        />
+        products={products}
+        cart={cart}
+        onAddToCart={handleAddToCart}
+        onRemoveFromCart={handleRemoveFromCart}
+      />
       </div>
-      <ScrollVideo/>
-      <ScrollVideo2/>
-      <Footer/>
+
+      <ScrollVideo />
+      <ScrollVideo2 />
+      <Footer />
     </div>
   );
 }
