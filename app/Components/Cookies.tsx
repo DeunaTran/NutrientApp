@@ -16,10 +16,13 @@ const Cookies: FC<CookiesProps> = ({ isOpen, setIsOpen }) => {
         <p>This website uses cokkies to ensure you get the best experience on our website </p>
         <p className='underline cursor-pointer'>Privacy Policy</p>
         <button
+            onClick={close}
           className='bg-black w-full cursor-pointer text-white px-4 py-2 font-semibold mt-2  transition-colors'>
             ACCEPT
           </button>
          <button
+          onClick={close}
+
           className='bg-white w-full cursor-pointer text-black border px-4 py-2 font-semibold mt-2  transition-colors'>
             PREFERENCES
           </button>

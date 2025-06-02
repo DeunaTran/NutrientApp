@@ -10,6 +10,7 @@ import JsonDisclosure from "~/Components/JsonDisclosure";
 import Footer from "~/Components/Footer";
 import { HomeInfoBox } from "~/Components/HomeInfoBox";
 import { ProductInfoBox } from "~/Components/ProductInfoBox";
+import LoginSale from "~/Components/LoginSale";
 
 
 export default function ProductPage() {
@@ -179,23 +180,12 @@ export default function ProductPage() {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div></div>;
   if (!product) return <div>Product not found</div>;
   return (
 
     <div className="">
-      {isAdd && 
-        <div className="bg-white text-black rounded-lg shadow-sm fixed bottom-10 left-5 p-3 w-40">
-          Sale 50%
-          <div
-            className="bg-black text-white rounded-full w-5 h-5 flex items-center justify-center cursor-pointer absolute top-1 right-1 select-none"
-            onClick={() => setIsAdd(false)}
-            aria-label="Close"
-          >
-            x
-          </div>
-        </div>
-      }
+      <LoginSale isOpen={isAdd} setIsOpen={setIsAdd} setAuthOpen={setAuthOpen} />
 
         <HeaderBanner isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} isCartOpen={isCartOpen}
   setIsCartOpen={setIsCartOpen} />
@@ -331,10 +321,6 @@ export default function ProductPage() {
               Ice-Skin™ is a performance fabric utilizing Creora® Coolwave technology, an innovative performance fabric developed by Hyosung®. Featuring advanced hydrophilic polymer technology for superior moisture management. Designed to absorb moisture 1.5 times more efficiently than nylon, it ensures rapid evaporation and a cooling effect during high-intensity activities. Ice-Skin™ offers all-season temperature regulation, making it the ultimate choice for athletes seeking comfort and performance in any climate.
             </p>
         </div>
-
-
-
-
 
         {/* <JsonDisclosure json={[
             {
