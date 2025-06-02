@@ -138,7 +138,7 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
     
     return (
 
-    <div className='fixed top-0 right-10 z-30'>
+    <div className=' bg-black wd:w-full md:pl-64 top-0 right-0 z-30'>
         <AnimatePresence>
         {isCartOpen && (
             <motion.div
@@ -148,10 +148,10 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
             transition={{
                 x: { type: "tween", duration: 0.4 }, // Applies to both animate and exit
             }}
-            className="fixed top-0 left-0 z-30 w-96 h-screen bg-white p-4 shadow-lg"
+            className=""
             >
-
-                <nav className="flex  font-thin  ml-4 text-gray-900 flex-col text-left w-screen h-screen py-2 transform transition-transform duration-500 ease-in-out  items-left space-y-8 fixed top-0 left-0 bg-white p-4 ">
+                
+                <nav className="flex  font-thin md:w-96 md:bg-white md:shadow-lg  ml-4 text-gray-900 flex-col text-left  w-screen h-screen py-2 transform transition-transform duration-500 ease-in-out  items-left space-y-8 fixed top-0 right-0 bg-white p-4 ">
                 {!isAuth && 
                 <>
                     <button onClick={() => setIsCartOpen(!isCartOpen)}>
@@ -327,7 +327,7 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
                     </div>
                     </div>
     
-                    <div className="flex  w-full fixed bottom-0 p-4 left-4 flex-col items-center space-y-2 mt-4">
+                    <div className="flex  w-full relative bottom-0 p-4 left-4 flex-col items-center space-y-2 mt-4">
                     <div className="border-t-2   bg-gray-100 shadow-2xl  ">
                         <div className=" text-xs "> Chọn khuyến mại và đặt hàng </div>
                         <button

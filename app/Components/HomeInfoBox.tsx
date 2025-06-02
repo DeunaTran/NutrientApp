@@ -5,10 +5,10 @@ import { MdOutlineFiberSmartRecord } from "react-icons/md";
 
 export const HomeInfoBox = () => {  
     return(
-        <div className="flex flex-col items-center text-sm justify-center relative bg-white py-4 ">
+        <div className="flex flex-col md:grid md:gap-3 md:mb-30 md:grid-cols-2 md:px-20 items-center text-sm justify-center relative bg-white py-4 ">
 
             <img src="https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//Gapz%20----Embrace%20Relentles%20---.jpg" 
-            alt="GapZ Logo" className="w-screen h-auto mb-4 hover:opacity-90" />
+            alt="GapZ Logo" className="w-screen md:col-span-2 md:w-2xl  h-auto mb-4 hover:opacity-90" />
 
             <div className=" flex flex-col text-gray-800 mb-2 border p-4 border-gray-400 rounded-lg shadow-md">
                 <div className="flex flex-row items-start justify-center gap-2">

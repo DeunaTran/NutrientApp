@@ -12,6 +12,7 @@ import { type Product } from "~/library/interface";
 import Cookies from "~/Components/Cookies";
 import LoginSale from "~/Components/LoginSale";
 import { HomeInfoBox } from "~/Components/HomeInfoBox";
+import HeaderBannerPage from "~/Components/HeaderBannerPage";
 
 
 interface UserProfile {
@@ -148,7 +149,7 @@ export default function Home() {
   return (
     <div className="bg-white">
       <LoginSale isOpen={isLoginSaleOpen} setIsOpen={setIsLoginSaleOpen} setAuthOpen={setAuthOpen} />
-      <HeaderBanner isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} />
+      <HeaderBannerPage isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} />
       <Authenticate isOpen={authOpen} onClose={() => setAuthOpen(false)} />
       <Cookies isOpen={isCookiesOpen} setIsOpen={setIsCookiesOpen} />
       <HomeCarousel />

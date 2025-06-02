@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 
 
-const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, products, isCartOpen, setIsCartOpen }: AuthenticateProps) => {
+const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, products, isCartOpen, setIsCartOpen }: AuthenticateProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -68,30 +68,17 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
 
       {/* Desktop Main Header */}
       <div className="hidden md:grid max-w-7xl text-sm py-1 mx-auto px-4 grid-cols-8 items-center gap-4">
-        {/* Logo */}
-        <div className="col-span-2 mb-2">
-          <img
-            src={
-              isScrolled
-                ? "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
-                : "https://i.ibb.co/d0sN71VG/dsa.png"         // Logo when NOT scrolled
-            }
-            alt="MyLogo"
-            className="h-8 w-auto rounded-lg"
-          />
-        </div>
-
         {/* Navigation */}
         <nav className="col-span-3">
-          <ul className="grid grid-cols-4 gap-0">
-            {["Nam", "Nữ", "Áo", "Quần"].map((label) => (
+          <ul className="grid grid-cols-4 gap-0 ">
+            {["SHOP", "COLLECTION", "FABRIC TECH", "EXPLORE"].map((label) => (
               <li
                 key={label}
-                className="hover:border-b-4 hover:border-gray-300 py-2 transition duration-200 transform hover:scale-105"
+                className="hover:border-b-4 font-thin hover:border-gray-300 py-2 transition duration-200 transform hover:scale-105"
               >
                 <a
                   href="#"
-                  className="block text-center px-3 py-1 rounded-md cursor-pointer text-black font-semibold"
+                  className="block text-center px-2 py-1 rounded-md cursor-pointer text-black font-light"
                 >
                   {label}
                 </a>
@@ -99,6 +86,19 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
             ))}
           </ul>
         </nav>
+
+        {/* Logo */}
+        <div className="col-span-2 items-center flex justify-center mb-2">
+          <img
+            src={
+               "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
+            }
+            alt="MyLogo"
+            className="h-12 w-auto rounded-lg"
+          />
+        </div>
+
+
 
         {/* Search Bar - Hidden on mobile */}
         
@@ -134,20 +134,9 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
         </form>
 
 
-
-        {/* Icons - Hidden on mobile */}
+        {/* Icons - Computer */}
         <div className="col-span-1 hidden md:flex justify-start items-center space-x-4">
-          {/* <FaShoppingCart
-            color="gray"
-            size={25}
-            className="hover:cursor-pointer hover:scale-110 transition-transform duration-200"
-          />
-          <IoIosHeart
-            color="gray"
-            size={25}
-            className="hover:cursor-pointer hover:scale-110 transition-transform duration-200"
-          /> */}
-          <button onClick={() => { setIsCartOpen(!isCartOpen) }}>
+          <button onClick={() => { console.log(">>>"); setIsCartOpen(!isCartOpen) }}>
               <IoCartOutline color="gray" size={22} />
             </button>
             
@@ -155,6 +144,68 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
                <FaBars color="gray" size={22} />
             </button>
         </div>
+        {/* Mobile Cart Bar */}
+        {isCartOpen && 
+          <Cart isAuth={isAuth} setOpenAuthModal={setOpenAuthModal} products={products} isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} profile={profile} setProfile={setProfile} />
+        }  
+        {mobileMenuOpen && (
+                  <AnimatePresence>
+                  <motion.div
+                    initial={{ x: "-100%", y: "0%" }}         // Start off-screen to the left
+                    animate={{ x: 0 }}               // Slide in
+                    exit={{ x: "-100%", y: "0%" }}            // Slide out
+                    transition={{
+                        x: { type: "tween", duration: 0.4 }, // Applies to both animate and exit
+                    }}
+                    className=""
+                    >
+                      <nav className="flex font-thin text-gray-900 flex-col text-left md:w-lg w-96 h-screen py-4 transform transition-transform duration-500 ease-in-out  items-left space-y-8 fixed top-0 left-0 bg-gray-100 p-4 mr-10 ">
+                        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                          {mobileMenuOpen ? <FaTimes color="gray" size={30} /> : <FaBars color="gray" size={22} />}
+                        </button>
+                        {["Cửa hàng", "Bộ sưu tập", "Chất liệu", "Khám phá"].map((label) => (
+                          <a
+                            key={label}
+                            href="#"
+                            className=" py-1 px-2 border-b border-gray-300  w-full"
+                          >
+                            {label}
+                          </a>
+                        ))}
+                        {!isAuth && 
+                        <button
+                          className="py-1 px-2 border rounded-sm w-full text-center"
+                          onClick={setOpenAuthModal} >
+                          Đăng nhập tài khoản
+                        </button>
+                        }
+                        {isAuth && 
+                        <div className="flex flex-col items-start space-y-2">
+                        <div className=" mt-4 "> Tài Khoản của bạn </div>
+                        <div className="  font-serif" >Chào mừng trở lại, {user?.user_metadata.full_name} </div>
+                        <div className=" text-sm"> 
+                          <div className=" "> Số điện thọai: {user?.user_metadata.phone} </div>
+                          <div className=" "> Email: {user?.user_metadata.email} </div>
+                        </div>
+        
+                        
+                        <SignOut onSignOut={() => {
+                          setUser(null);
+                          setAuth?.(false); // Update parent/global state if needed
+                          setMobileMenuOpen(false);
+                          console.log("User signed out");
+                        }} />
+                        </div>
+                        
+                        }
+                        
+        
+                      </nav>
+                    </motion.div>
+                  </AnimatePresence>
+        
+                )} 
+
       </div>
 
       {/* Mobile Header */}
@@ -164,9 +215,7 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
           <Link to="/" className="flex items-center">
             <img
               src={
-                isScrolled
-                  ? "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
-                  : "https://i.ibb.co/d0sN71VG/dsa.png"         // Logo when NOT scrolled
+                "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
               }
               alt="MyLogo"
               className="h-8 w-auto"
@@ -300,4 +349,4 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
   );
 };
 
-export default HeaderBanner;
+export default HeaderBannerPage;

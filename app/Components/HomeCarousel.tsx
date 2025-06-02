@@ -66,7 +66,7 @@ export default function HomeCarousel() {
         ))}
       </div>
       
-      <div className="  flex flex-col font-light text-sm px-1 text-center rounded-sm py-1  absolute bottom-1/3 left-1/2 transform -translate-x-1/2  space-x-2">
+      <div className="  flex flex-col font-light text-sm px-1 text-center rounded-sm py-1  absolute md:bottom-10 bottom-1/3 left-1/2 transform -translate-x-1/2  space-x-2">
         <p className="text-xs">
           Latest exclusive offers just for you!
         </p>

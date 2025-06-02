@@ -11,6 +11,7 @@ import Footer from "~/Components/Footer";
 import { HomeInfoBox } from "~/Components/HomeInfoBox";
 import { ProductInfoBox } from "~/Components/ProductInfoBox";
 import LoginSale from "~/Components/LoginSale";
+import HeaderBannerPage from "~/Components/HeaderBannerPage";
 
 
 export default function ProductPage() {
@@ -178,18 +179,18 @@ export default function ProductPage() {
 
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [imgIndex, setImgIndex] = useState(0);
 
 
   if (loading) return <div></div>;
   if (!product) return <div>Product not found</div>;
   return (
 
-    <div className="">
+    <div className="md:pt-24 md:grid md:px-4 md:grid-cols-2 md:gap-4 lg:gap-0 xl:gap-12 2xl:gap-16 bg-white min-h-screen">
       <LoginSale isOpen={isAdd} setIsOpen={setIsAdd} setAuthOpen={setAuthOpen} />
-
-        <HeaderBanner isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} isCartOpen={isCartOpen}
+      <HeaderBannerPage isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} isCartOpen={isCartOpen}
   setIsCartOpen={setIsCartOpen} />
-        <div id="item" className="flex flex-col items-center bg-white/10 backdrop-blur-3xl pt-14">
+        <div id="item" className=" md:hidden  flex flex-col items-center bg-white/10 backdrop-blur-3xl pt-14">
             <div className="carousel carousel-center bg-white space-x-2 px-4 py-10 ">
               {product.imgList.map((img: string, index: number) => (
                 <div
@@ -203,119 +204,135 @@ export default function ProductPage() {
                 </div>
               ))}
             </div>
-     
         </div>
-        <div className="bg-white text-black items-center font-thin gap-1 flex flex-col text-center max-w-4xl mx-auto p-6 py-4">
-          <div className="flex flex-row justify-between items-center w-full px-4 m-8 mb-2">
-              <div></div>
-              <h2 className="text-xs text-white bg-black font-bold p-1 w-18">VSPGAP-{product.id}</h2>
-                    {cart[product.id] ? (
-                    <button
-                      className="text-black font-light rounded-lg cursor-pointer"
-                      onClick={() => handleRemoveFromCart(product.id)}
-                      title="Remove from Cart"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                        <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.25 5.507v11.561L5.853 2.671c.15-.043.306-.075.467-.094a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93ZM3.75 21V6.932l14.063 14.063L12 18.088l-7.165 3.583A.75.75 0 0 1 3.75 21Z" />
-                      </svg>
-                    </button>
-                  ) : (
-                    <button
-                      className="text-black font-light rounded-lg cursor-pointer"
-                      onClick={() => handleAddToCart(product.id)}
-                      title="Add to Cart"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
+        <div className="hidden md:block ">
+            <div
+              className="carousel-item w-full flex-shrink-0 snap-center"
+            >
+              <img src={product?.imgList[imgIndex]} className="w-full" alt={`product-${imgIndex}`} />
+            </div>
+        </div>
+        <div className="md:mt-0 md:grid md:grid-cols-3 bg-white text-black items-center font-thin gap-1 flex flex-col text-center max-w-4xl mx-auto p-6 py-4">
+            <div className="hidden md:block md:flex-col">
+              {product.imgList.map((img: string, index: number) => (
+                <div
+                  key={index}
+                  className=" w-full my-4 flex-shrink-0 snap-center"
+                  id={`item${index + 1}`}
+                  data-index={index}
+                  onClick={() => {
+                    setImgIndex(index);
+                  }}
+
+                > 
+                  {index === imgIndex ? (
+                    <img src={img} className="w-24 h-auto border-2 border-black" alt={`product-${index}`} />  
+                  ) : ( 
+                  <img src={img} className= "w-24 h-auto" alt={`product-${index}`} />
+                  )
+                }
+                </div>
+              ))}
+            </div>
+            <div className="col-span-2">
+              <div className="flex flex-row justify-between items-center w-full px-4 m-8 mb-2">
+                  <div></div>
+                  <h2 className="text-xs text-white bg-black font-bold p-1 w-18">VSPGAP-{product.id}</h2>
+                      {cart[product.id] ? (
+                      <button
+                        className="text-black font-light rounded-lg cursor-pointer"
+                        onClick={() => handleRemoveFromCart(product.id)}
+                        title="Remove from Cart"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
-                        />
-                      </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                          <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.25 5.507v11.561L5.853 2.671c.15-.043.306-.075.467-.094a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93ZM3.75 21V6.932l14.063 14.063L12 18.088l-7.165 3.583A.75.75 0 0 1 3.75 21Z" />
+                        </svg>
+                      </button>
+                    ) : (
+                      <button
+                        className="text-black font-light rounded-lg cursor-pointer"
+                        onClick={() => handleAddToCart(product.id)}
+                        title="Add to Cart"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
+                          />
+                        </svg>
+                      </button>
+                    )}
+              </div>
+              <h1 className=" text-2xl font-thin ">{product.name}</h1>
+              <h1 className=" text-sm font-thin ">{product.nickname}</h1>
+              <div className="flex flex-row gap-2">
+                <h2 className="text-sm  ">{product.price.toLocaleString("vi-VN")} đ</h2>
+                <p className="text-sm font-light text-gray-400  line-through">
+                  {(product.price * 110 / 100).toLocaleString("vi-VN")} đ
+                </p>
+              </div>
+          
+              <div className=" bg-white  p-4">
+                <p className="text-sm font-light mt-0 mb-2 text-left text-gray-400">Color: </p>
+                <div className="flex flex-row gap-1 items-left bg-white max-w-4xl mx-auto">
+                  {colors.map((color) => (
+                    <div
+                      key={color.value}
+                      onClick={() => setSelectedColor(color.value)}
+                      className={`w-14 h-6  cursor-pointer border-2 ${
+                        selectedColor === color.value ? "border-black scale-110" : "border-gray-300"
+                      }`}
+                      style={{ backgroundColor: color.value }}
+                    />
+                  ))}
+                </div>
+                <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400">Size: </p>
+                <div className="flex flex-row gap-2 items-left bg-white text-black font-thin max-w-4xl mx-auto">
+                  {sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`text-xs font-thin border px-5 py-1 transition-colors duration-200 ${
+                        selectedSize === size
+                          ? "bg-black text-white border-black"
+                          : "bg-white text-black border"
+                      }`}
+                    >
+                      {size}
                     </button>
-                  )}
+                  ))}
+                </div>
+                <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400 underline cursor-pointer">Size Guide</p>
+                <div className="bg-black text-white text-center p-3 text-xs mt-5 cursor-pointer"
+                  onClick={() => {
+                    if (!selectedSize || !selectedColor) {
+                      alert("Please select a size and color before adding to cart.");
+                      return;
+                    }
+                    handleAddToCart(product.id);
+                    // setIsAdd(true);
+                    setIsCartOpen(true);
+                    // setTimeout(() => {
+                    //   setIsAdd(false);
+                    // }, 2000);
+                  }}
+                  > ADD TO CART 
+                </div>
+              </div>
             </div>
-            <h1 className=" text-2xl font-thin ">{product.name}</h1>
-            <h1 className=" text-sm font-thin ">{product.nickname}</h1>
-            <div className="flex flex-row gap-2">
-              <h2 className="text-sm  ">{product.price.toLocaleString("vi-VN")} đ</h2>
-              <p className="text-sm font-light text-gray-400  line-through">
-                {(product.price * 110 / 100).toLocaleString("vi-VN")} đ
-              </p>
-
-            </div>
-            
-
-
-
-
         </div>
-        <div className=" bg-white  p-4">
-            {/* <p className="text-sm font-light text-left text-gray-400">Color: </p> */}
-          {/* <div className="flex flex-row gap-2 item-left bg-white text-black font-thin ">
-            <p className="text-sm font-light text-black w-20 bg-black"></p>
-          </div> */}
-          <p className="text-sm font-light mt-0 mb-2 text-left text-gray-400">Color: </p>
 
-          <div className="flex flex-row gap-1 items-left bg-white max-w-4xl mx-auto">
-            {colors.map((color) => (
-              <div
-                key={color.value}
-                onClick={() => setSelectedColor(color.value)}
-                className={`w-14 h-6  cursor-pointer border-2 ${
-                  selectedColor === color.value ? "border-black scale-110" : "border-gray-300"
-                }`}
-                style={{ backgroundColor: color.value }}
-              />
-            ))}
-          </div>
 
-          <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400">Size: </p>
-          {/* <div className="flex flex-row gap-2 item-left bg-white text-black font-thin max-w-4xl mx-auto ">
-            <p className="text-xs font-thin text-black border bg-white px-5 py-1"> XS </p>
-            ...
-          </div> */}
-          <div className="flex flex-row gap-2 items-left bg-white text-black font-thin max-w-4xl mx-auto">
-            {sizes.map((size) => (
-              <button
-                key={size}
-                onClick={() => setSelectedSize(size)}
-                className={`text-xs font-thin border px-5 py-1 transition-colors duration-200 ${
-                  selectedSize === size
-                    ? "bg-black text-white border-black"
-                    : "bg-white text-black border"
-                }`}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
-          <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400 underline cursor-pointer">Size Guide</p>
-          <div className="bg-black text-white text-center p-3 text-xs mt-5 cursor-pointer"
-            onClick={() => {
-              if (!selectedSize || !selectedColor) {
-                alert("Please select a size and color before adding to cart.");
-                return;
-              }
-              handleAddToCart(product.id);
-              // setIsAdd(true);
-              setIsCartOpen(true);
-              // setTimeout(() => {
-              //   setIsAdd(false);
-              // }, 2000);
-            }}
-            > ADD TO CART 
-          </div>
-        </div>
         <ProductInfoBox/>
-        <div className="bg-gray-300 text-sm text-center  text-black font-thin max-w-4xl mx-auto p-6 py-10">
+        <div className="bg-gray-300 col-span-2 text-sm text-center  text-black font-thin max-w-4xl mx-auto p-6 py-10">
             <h2 className="text-lg font-light mb-2">Ice-Skin™ Fabrication</h2>
             <p>
               Ice-Skin™ is a performance fabric utilizing Creora® Coolwave technology, an innovative performance fabric developed by Hyosung®. Featuring advanced hydrophilic polymer technology for superior moisture management. Designed to absorb moisture 1.5 times more efficiently than nylon, it ensures rapid evaporation and a cooling effect during high-intensity activities. Ice-Skin™ offers all-season temperature regulation, making it the ultimate choice for athletes seeking comfort and performance in any climate.
@@ -329,7 +346,9 @@ export default function ProductPage() {
                 defaultOpen: true
             },
         ]} /> */}
-        <Footer/>
+        <div className="col-span-2">
+          <Footer/>
+        </div>
     </div>
     
   );
