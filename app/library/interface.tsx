@@ -27,4 +27,7 @@ export interface AuthenticateProps {
   setProfile: (profile: UserProfile | null) => void;
   profile?: UserProfile | null;
   products?: Product[];
+  // setCartOpen?: (open: boolean) => void;
+  isCartOpen: boolean;
+  setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -9,6 +9,9 @@ import Footer from "~/Components/Footer";
 import supabase from "utils/supabase";
 import Authenticate from "~/Components/Authenticate";
 import { type Product } from "~/library/interface";
+import Cookies from "~/Components/Cookies";
+import LoginSale from "~/Components/LoginSale";
+import { HomeInfoBox } from "~/Components/HomeInfoBox";
 
 
 interface UserProfile {
@@ -29,6 +32,7 @@ export default function Home() {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cart, setCart] = useState<Record<string | number, number>>({});
+  const [isCookiesOpen, setIsCookiesOpen] = useState(true)
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
@@ -136,16 +140,20 @@ export default function Home() {
     }
     setLoadingProfile(false);
   };
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoginSaleOpen, setIsLoginSaleOpen] = useState(true);
 
 
   
   return (
     <div className="bg-white">
-      <HeaderBanner isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} />
+      <LoginSale isOpen={isLoginSaleOpen} setIsOpen={setIsLoginSaleOpen} setAuthOpen={setAuthOpen} />
+      <HeaderBanner isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} />
       <Authenticate isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+      <Cookies isOpen={isCookiesOpen} setIsOpen={setIsCookiesOpen} />
       <HomeCarousel />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 px-4">
+      <div id="/products" className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 mb-4 px-4">
         <ProductList
         products={products}
         cart={cart}
@@ -153,6 +161,15 @@ export default function Home() {
         onRemoveFromCart={handleRemoveFromCart}
       />
       </div>
+      <div className="flex justify-center items-center  mb-10">
+        <button
+          className="bg-black text-white px-10 py-2  font-semibold transition-colors hover:bg-gray-800"
+          onClick={() => setIsCartOpen(true)}
+        >
+          View Cart
+        </button>
+      </div>
+      <HomeInfoBox/>
 
       <ScrollVideo />
       <ScrollVideo2 />

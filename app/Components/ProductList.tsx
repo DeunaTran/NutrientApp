@@ -37,16 +37,16 @@ const ProductList: React.FC<ProductListProps> = ({ products, cart, onAddToCart, 
 
               <div className="flex flex-col pt-0">
 
-                <div className=" text-sm font-thin mb-0 text-center rounded-lg  text-gray-800 capitalize">
+                <div className=" text-sm font-light mb-0 text-center rounded-lg  text-black capitalize">
                   {product.name}
                 </div>
-                <div className="flex flex-row justify-between">
-                  <p className="text-xs font-light text-gray-400 m-0 p-0 line-through">
+                <div className="flex flex-row gap-2 ">
+                  <p className="text-xs font-thin text-gray-400 m-0 p-0 line-through">
                     {(product.price * 110 / 100).toLocaleString("vi-VN")} đ
                   </p>
                   {/* <p className="text-xs font-light text-white m-0 p-0">{(product.price*90/100).toLocaleString("vi-VN")} đ</p>  */}
                   {/* sale {product.sale}%  */}
-                  <p className="text-sm font-light text-gray-700 m-0 p-0">{(product.price).toLocaleString("vi-VN")} đ </p>
+                  <p className="text-sm font-thin text-gray-700 m-0 p-0">{(product.price).toLocaleString("vi-VN")} đ </p>
                 </div>
 
                 <div className="flex flex-row justify-between">

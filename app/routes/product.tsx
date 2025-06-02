@@ -1,13 +1,15 @@
 // routes/product.tsx
 
 import { useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import supabase from "utils/supabase";
 import { type Product } from "~/library/interface";
 import HeaderBanner from "~/Components/HeaderBanner";
 import { type UserProfile } from "~/library/interface";
 import JsonDisclosure from "~/Components/JsonDisclosure";
 import Footer from "~/Components/Footer";
+import { HomeInfoBox } from "~/Components/HomeInfoBox";
+import { ProductInfoBox } from "~/Components/ProductInfoBox";
 
 
 export default function ProductPage() {
@@ -26,6 +28,9 @@ export default function ProductPage() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
+  const [visibleIndex, setVisibleIndex] = useState(0);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const fetchProducts = async () => {
     setLoadingProducts(true);
     const { data, error } = await supabase
@@ -156,27 +161,62 @@ export default function ProductPage() {
     }
   }, [id]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 1, behavior: "smooth" });
+  }, [product]);
+  const [isAdd, setIsAdd] = useState(true);
+  
+  const sizes = ["XS", "S", "M", "L", "XL"]; // Add or modify sizes as needed
+
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const colors = [
+    { name: "Black", value: "#000000" },
+    { name: "Gray", value: "#A9A9A9" },        // or "#808080" for standard gray
+    { name: "Light Green", value: "#90EE90" }, // pastel/light green
+  ];
+
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+
   if (loading) return <div>Loading...</div>;
   if (!product) return <div>Product not found</div>;
-
   return (
 
-    <div className="bg-white">
-        <HeaderBanner isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} />
-        <div className="flex flex-col items-center bg-black backdrop-blur-3xl pt-14">
-            <div className="carousel  w-screen h-auto">
-                {product.imgList.map((img, index) => (
-                <div className="carousel-item w-full" key={index}>
-                    <img
-                    src={img}
-                    className="w-full"
-                    alt="Tailwind CSS Carousel component" />
-                </div>
-                ))}
-            </div>
+    <div className="">
+      {isAdd && 
+        <div className="bg-white text-black rounded-lg shadow-sm fixed bottom-10 left-5 p-3 w-40">
+          Sale 50%
+          <div
+            className="bg-black text-white rounded-full w-5 h-5 flex items-center justify-center cursor-pointer absolute top-1 right-1 select-none"
+            onClick={() => setIsAdd(false)}
+            aria-label="Close"
+          >
+            x
+          </div>
         </div>
-        <div className="bg-white text-black items-center font-thin gap-1 flex flex-col text-center max-w-4xl mx-auto p-6">
-          <div className="flex flex-row justify-between items-center w-full px-4">
+      }
+
+        <HeaderBanner isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} isCartOpen={isCartOpen}
+  setIsCartOpen={setIsCartOpen} />
+        <div id="item" className="flex flex-col items-center bg-white/10 backdrop-blur-3xl pt-14">
+            <div className="carousel carousel-center bg-white space-x-2 px-4 py-10 ">
+              {product.imgList.map((img: string, index: number) => (
+                <div
+                  key={index}
+                  
+                  className="carousel-item w-full flex-shrink-0 snap-center"
+                  id={`item${index + 1}`}
+                  data-index={index}
+                >
+                  <img src={img} className="w-full" alt={`product-${index}`} />
+                </div>
+              ))}
+            </div>
+     
+        </div>
+        <div className="bg-white text-black items-center font-thin gap-1 flex flex-col text-center max-w-4xl mx-auto p-6 py-4">
+          <div className="flex flex-row justify-between items-center w-full px-4 m-8 mb-2">
               <div></div>
               <h2 className="text-xs text-white bg-black font-bold p-1 w-18">VSPGAP-{product.id}</h2>
                     {cart[product.id] ? (
@@ -212,28 +252,97 @@ export default function ProductPage() {
                     </button>
                   )}
             </div>
-            <h1 className=" text-2xl font-thin">{product.name}</h1>
+            <h1 className=" text-2xl font-thin ">{product.name}</h1>
             <h1 className=" text-sm font-thin ">{product.nickname}</h1>
-            <h2 className="text-sm p-1 ">{product.price.toLocaleString("vi-VN")} đ</h2>
-            <JsonDisclosure json={[
-                {
-                    title: "Mô tả sản phẩm",
-                    content: product.description,
-                    defaultOpen: true
-                },
-                // {
-                //     title: "Product Details",
-                //     content: (
-                //         <div className="text-left">
-                //             <p>Sale: {product.sale}</p>
-                //             <p>Price: {product.price.toLocaleString("vi-VN")} đ</p>
-                //         </div>
-                //     ),
-                //     defaultOpen: false
-                // }
-            ]} />
+            <div className="flex flex-row gap-2">
+              <h2 className="text-sm  ">{product.price.toLocaleString("vi-VN")} đ</h2>
+              <p className="text-sm font-light text-gray-400  line-through">
+                {(product.price * 110 / 100).toLocaleString("vi-VN")} đ
+              </p>
+
+            </div>
+            
+
+
+
 
         </div>
+        <div className=" bg-white  p-4">
+            {/* <p className="text-sm font-light text-left text-gray-400">Color: </p> */}
+          {/* <div className="flex flex-row gap-2 item-left bg-white text-black font-thin ">
+            <p className="text-sm font-light text-black w-20 bg-black"></p>
+          </div> */}
+          <p className="text-sm font-light mt-0 mb-2 text-left text-gray-400">Color: </p>
+
+          <div className="flex flex-row gap-1 items-left bg-white max-w-4xl mx-auto">
+            {colors.map((color) => (
+              <div
+                key={color.value}
+                onClick={() => setSelectedColor(color.value)}
+                className={`w-14 h-6  cursor-pointer border-2 ${
+                  selectedColor === color.value ? "border-black scale-110" : "border-gray-300"
+                }`}
+                style={{ backgroundColor: color.value }}
+              />
+            ))}
+          </div>
+
+          <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400">Size: </p>
+          {/* <div className="flex flex-row gap-2 item-left bg-white text-black font-thin max-w-4xl mx-auto ">
+            <p className="text-xs font-thin text-black border bg-white px-5 py-1"> XS </p>
+            ...
+          </div> */}
+          <div className="flex flex-row gap-2 items-left bg-white text-black font-thin max-w-4xl mx-auto">
+            {sizes.map((size) => (
+              <button
+                key={size}
+                onClick={() => setSelectedSize(size)}
+                className={`text-xs font-thin border px-5 py-1 transition-colors duration-200 ${
+                  selectedSize === size
+                    ? "bg-black text-white border-black"
+                    : "bg-white text-black border"
+                }`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+          <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400 underline cursor-pointer">Size Guide</p>
+          <div className="bg-black text-white text-center p-3 text-xs mt-5 cursor-pointer"
+            onClick={() => {
+              if (!selectedSize || !selectedColor) {
+                alert("Please select a size and color before adding to cart.");
+                return;
+              }
+              handleAddToCart(product.id);
+              // setIsAdd(true);
+              setIsCartOpen(true);
+              // setTimeout(() => {
+              //   setIsAdd(false);
+              // }, 2000);
+            }}
+            > ADD TO CART 
+          </div>
+        </div>
+        <ProductInfoBox/>
+        <div className="bg-gray-300 text-sm text-center  text-black font-thin max-w-4xl mx-auto p-6 py-10">
+            <h2 className="text-lg font-light mb-2">Ice-Skin™ Fabrication</h2>
+            <p>
+              Ice-Skin™ is a performance fabric utilizing Creora® Coolwave technology, an innovative performance fabric developed by Hyosung®. Featuring advanced hydrophilic polymer technology for superior moisture management. Designed to absorb moisture 1.5 times more efficiently than nylon, it ensures rapid evaporation and a cooling effect during high-intensity activities. Ice-Skin™ offers all-season temperature regulation, making it the ultimate choice for athletes seeking comfort and performance in any climate.
+            </p>
+        </div>
+
+
+
+
+
+        {/* <JsonDisclosure json={[
+            {
+                title: "Mô tả sản phẩm",
+                content: product.description,
+                defaultOpen: true
+            },
+        ]} /> */}
         <Footer/>
     </div>
     

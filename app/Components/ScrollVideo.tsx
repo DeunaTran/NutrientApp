@@ -54,7 +54,7 @@ useEffect(() => {
       {videoUrl ? (
         <video
           ref={videoRef}
-          src={videoUrl}
+          src="https://kmaxqaqeyvcvuizuagqi.supabase.co/storage/v1/object/public/videos//GAPZ-2-0418.mp4"
           muted
           loop
           playsInline

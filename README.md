@@ -1,3 +1,8 @@
+
+                              {(product.price * profile.cart[product.id]).toLocaleString("vi-VN")} đ
+
+
+
 # Welcome to React Router!
 
 A modern, production-ready template for building full-stack React applications using React Router.

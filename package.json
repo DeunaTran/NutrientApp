@@ -15,6 +15,7 @@
     "@react-router/serve": "^7.5.3",
     "@supabase/supabase-js": "^2.49.8",
     "daisyui": "^5.0.35",
+    "framer-motion": "^12.15.0",
     "isbot": "^5.1.27",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

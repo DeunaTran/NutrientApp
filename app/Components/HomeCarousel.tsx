@@ -65,6 +65,19 @@ export default function HomeCarousel() {
           </div>
         ))}
       </div>
+      
+      <div className="  flex flex-col font-light text-sm px-1 text-center rounded-sm py-1  absolute bottom-1/3 left-1/2 transform -translate-x-1/2  space-x-2">
+        <p className="text-xs">
+          Latest exclusive offers just for you!
+        </p>
+        <button
+          onClick={() => {
+            window.scrollTo({ top: 700, behavior: "smooth" });
+          }}
+         className="bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
+          SHOP NOW
+        </button>
+      </div>
     </div>
   );
 }
