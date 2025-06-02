@@ -52,7 +52,7 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
   return (
     <header
       className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md" : ""
+        isScrolled ? "bg-white shadow-md" : "bg-white shadow-md"
       }`}
     >
       {/* Top Bar - Desktop Only */}
@@ -89,13 +89,22 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
 
         {/* Logo */}
         <div className="col-span-2 items-center flex justify-center mb-2">
-          <img
+          {/* <img
             src={
                "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
             }
             alt="MyLogo"
             className="h-12 w-auto rounded-lg"
-          />
+          /> */}
+          <Link to="/" className="flex items-center">
+            <img
+              src={
+                "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
+              }
+              alt="MyLogo"
+              className="h-8 w-auto"
+            />
+          </Link>
         </div>
 
 
@@ -207,7 +216,7 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
                 )} 
 
       </div>
-
+{/* _______________________________________________________________________________ */}
       {/* Mobile Header */}
       <div className="md:hidden flex flex-col px-4 py-2 shadow-md bg-transparent">
         {/* Top Row: Logo + Hamburger */}

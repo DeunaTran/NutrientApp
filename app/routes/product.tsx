@@ -13,6 +13,7 @@ import { ProductInfoBox } from "~/Components/ProductInfoBox";
 import LoginSale from "~/Components/LoginSale";
 import HeaderBannerPage from "~/Components/HeaderBannerPage";
 import { ProductIntroBox } from "~/Components/ProductIntroBox";
+import Authenticate from "~/Components/Authenticate";
 
 
 export default function ProductPage() {
@@ -191,21 +192,7 @@ export default function ProductPage() {
       <LoginSale isOpen={isAdd} setIsOpen={setIsAdd} setAuthOpen={setAuthOpen} />
       <HeaderBannerPage isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} isCartOpen={isCartOpen}
   setIsCartOpen={setIsCartOpen} />
-        {/* <div id="item" className=" md:hidden  flex flex-col items-center bg-white/10 backdrop-blur-3xl pt-14">
-            <div className="carousel carousel-center bg-white space-x-2 px-4 py-10 ">
-              {product.imgList.map((img: string, index: number) => (
-                <div
-                  key={index}
-                  
-                  className="carousel-item w-full flex-shrink-0 snap-center"
-                  id={`item${index + 1}`}
-                  data-index={index}
-                >
-                  <img src={img} className="w-full" alt={`product-${index}`} />
-                </div>
-              ))}
-            </div>
-        </div> */}
+      <Authenticate isOpen={authOpen} onClose={() => setAuthOpen(false)} />
         <div className=" ">
             <div
               className=" w-full flex-shrink-0 snap-center"
