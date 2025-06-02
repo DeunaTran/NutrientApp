@@ -12,6 +12,7 @@ import { HomeInfoBox } from "~/Components/HomeInfoBox";
 import { ProductInfoBox } from "~/Components/ProductInfoBox";
 import LoginSale from "~/Components/LoginSale";
 import HeaderBannerPage from "~/Components/HeaderBannerPage";
+import { ProductIntroBox } from "~/Components/ProductIntroBox";
 
 
 export default function ProductPage() {
@@ -186,11 +187,11 @@ export default function ProductPage() {
   if (!product) return <div>Product not found</div>;
   return (
 
-    <div className="md:pt-24 md:grid md:px-4 md:grid-cols-2 md:gap-4 lg:gap-0 xl:gap-12 2xl:gap-16 bg-white min-h-screen">
+    <div className="md:pt-24 pt-16 md:grid md:px-4 md:grid-cols-2 md:gap-4 lg:gap-0 xl:gap-12 2xl:gap-16 bg-white min-h-screen">
       <LoginSale isOpen={isAdd} setIsOpen={setIsAdd} setAuthOpen={setAuthOpen} />
       <HeaderBannerPage isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} isCartOpen={isCartOpen}
   setIsCartOpen={setIsCartOpen} />
-        <div id="item" className=" md:hidden  flex flex-col items-center bg-white/10 backdrop-blur-3xl pt-14">
+        {/* <div id="item" className=" md:hidden  flex flex-col items-center bg-white/10 backdrop-blur-3xl pt-14">
             <div className="carousel carousel-center bg-white space-x-2 px-4 py-10 ">
               {product.imgList.map((img: string, index: number) => (
                 <div
@@ -204,20 +205,20 @@ export default function ProductPage() {
                 </div>
               ))}
             </div>
-        </div>
-        <div className="hidden md:block ">
+        </div> */}
+        <div className=" ">
             <div
-              className="carousel-item w-full flex-shrink-0 snap-center"
+              className=" w-full flex-shrink-0 snap-center"
             >
               <img src={product?.imgList[imgIndex]} className="w-full" alt={`product-${imgIndex}`} />
             </div>
         </div>
-        <div className="md:mt-0 md:grid md:grid-cols-3 bg-white text-black items-center font-thin gap-1 flex flex-col text-center max-w-4xl mx-auto p-6 py-4">
-            <div className="hidden md:block md:flex-col">
+        <div className="md:mt-0 md:grid md:grid-cols-3 bg-white text-black items-center font-thin gap-1 flex flex-col text-center max-w-4xl mx-auto p-6 py-1">
+            <div className="flex gap-1 flex-row md:flex-col">
               {product.imgList.map((img: string, index: number) => (
                 <div
                   key={index}
-                  className=" w-full my-4 flex-shrink-0 snap-center"
+                  className=" md:w-full my-4 flex-shrink-0 snap-center"
                   id={`item${index + 1}`}
                   data-index={index}
                   onClick={() => {
@@ -226,19 +227,19 @@ export default function ProductPage() {
 
                 > 
                   {index === imgIndex ? (
-                    <img src={img} className="w-24 h-auto border-2 border-black" alt={`product-${index}`} />  
+                    <img src={img} className="w-16 md:w-24 h-auto border-2 border-black" alt={`product-${index}`} />  
                   ) : ( 
-                  <img src={img} className= "w-24 h-auto" alt={`product-${index}`} />
+                  <img src={img} className= "md:w-24 w-16 h-auto" alt={`product-${index}`} />
                   )
                 }
                 </div>
               ))}
             </div>
-            <div className="col-span-2">
-              <div className="flex flex-row justify-between items-center w-full px-4 m-8 mb-2">
-                  <div></div>
-                  <h2 className="text-xs text-white bg-black font-bold p-1 w-18">VSPGAP-{product.id}</h2>
-                      {cart[product.id] ? (
+            <div className="md:col-span-2">
+              <div className="flex flex-row justify-center items-center w-full">
+                  {/* <div></div> */}
+                  <h2 className="text-xs  text-center text-white bg-black font-bold p-1 w-18">VSPGAP-{product.id}</h2>
+                      {/* {cart[product.id] ? (
                       <button
                         className="text-black font-light rounded-lg cursor-pointer"
                         onClick={() => handleRemoveFromCart(product.id)}
@@ -269,11 +270,11 @@ export default function ProductPage() {
                           />
                         </svg>
                       </button>
-                    )}
+                    )} */}
               </div>
               <h1 className=" text-2xl font-thin ">{product.name}</h1>
               <h1 className=" text-sm font-thin ">{product.nickname}</h1>
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-row gap-2 justify-center">
                 <h2 className="text-sm  ">{product.price.toLocaleString("vi-VN")} đ</h2>
                 <p className="text-sm font-light text-gray-400  line-through">
                   {(product.price * 110 / 100).toLocaleString("vi-VN")} đ
@@ -331,13 +332,14 @@ export default function ProductPage() {
         </div>
 
 
-        <ProductInfoBox/>
-        <div className="bg-gray-300 col-span-2 text-sm text-center  text-black font-thin max-w-4xl mx-auto p-6 py-10">
+        <ProductInfoBox description={product.description}/>
+        <ProductIntroBox introduction={product.introduction} />
+        {/* <div className="bg-gray-300 col-span-2 text-sm text-center  text-black font-thin max-w-4xl mx-auto p-6 py-10">
             <h2 className="text-lg font-light mb-2">Ice-Skin™ Fabrication</h2>
             <p>
               Ice-Skin™ is a performance fabric utilizing Creora® Coolwave technology, an innovative performance fabric developed by Hyosung®. Featuring advanced hydrophilic polymer technology for superior moisture management. Designed to absorb moisture 1.5 times more efficiently than nylon, it ensures rapid evaporation and a cooling effect during high-intensity activities. Ice-Skin™ offers all-season temperature regulation, making it the ultimate choice for athletes seeking comfort and performance in any climate.
             </p>
-        </div>
+        </div> */}
 
         {/* <JsonDisclosure json={[
             {

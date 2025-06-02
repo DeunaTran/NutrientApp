@@ -9,6 +9,7 @@ export interface Product {
   description: string;
   imgList: string[];
   nickname: string;
+  introduction: string;
 }
 
 // Define the user profile structure
