@@ -155,6 +155,7 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
         else {
         console.log("No user is in header space.");
         setOpenAuthModal();
+        setProfile({cart:{}, user_id: "", created_at:"" })
         }
     });
     }, [isAuth]);
@@ -271,22 +272,14 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
             >
                 
                 <nav className="flex  font-thin md:w-4xl bg-white md:shadow-lg  ml-4 text-gray-900 flex-col text-left  w-screen h-screen py-2 transform transition-transform duration-500 ease-in-out  items-left space-y-8 fixed top-0 right-0  ">
-                {!isAuth && 
-                <>
-                    <button onClick={() => setIsCartOpen(!isCartOpen)}>
-                    <FaTimes color="gray" size={22} /> 
-                    </button>
-                    <button
-                    className="py-1 px-2 border rounded-sm w-full text-center"
-                        onClick={setOpenAuthModal} >
-                    Đăng nhập tài khoản
-                    </button>
-                </>
-                }
-                {isAuth && 
+                
                 <div className="flex  max-h-screen pb-20 overflow-y-auto flex-col items-start space-y-2 p-4">
-                    <div className="flex flex-row w-full justify-between items-stretch"> 
-                        <div className=" font-light md:hidden ">  </div>
+                    <div className="flex flex-row px-2 w-full justify-between items-stretch"> 
+                        {!isAuth && <button
+                        className="py-1 px-2 border rounded-sm w-full text-center"
+                            onClick={setOpenAuthModal} >
+                        Đăng nhập tài khoản
+                        </button>}
                         <button className='cursor-pointer' onClick={()=>{setIsCartOpen(false)}} >
                             <FaTimes color=" black " size={22} /> 
                         </button>
@@ -616,12 +609,12 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
                             
                         </div>
                     </div>
-                    <div className="flex  fixed w-full md:w-4xl border-t border-gray-400 p-4 bg-gray-100  bottom-0 px-4 right-0 flex-col items-center space-y-2 shadow-lg">
+                    <div className="flex  fixed w-full md:w-4xl border-t border-gray-400 py-4  bg-gray-100  bottom-0 px-4 right-0 flex-col items-center space-y-2 shadow-lg">
                         <div className=" grid md:grid-cols-4 grid-cols-2   shadow-2xl  ">
                             {/* <div className=" text-xs "> Chọn khuyến mại và đặt hàng </div> */}
                             <div className='col-span-2 flex flex-row items-center  justify-between gap-2'>
                                 <button
-                                    className=" cursor-pointer px-8 py-2 text-base md:text-xl font-base   border  bg-black text-white rounded-full text-center"
+                                    className=" cursor-pointer md:px-8 px-3 min-w-30 py-2 text-base md:text-xl font-base   border  bg-black text-white rounded-full text-center"
                                     onClick={() => {
                                     console.log("Proceed to checkout");
                                     if (products) {
@@ -664,7 +657,6 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
     
                 </div>
                 
-                }
                 
     
                 </nav>

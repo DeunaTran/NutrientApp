@@ -82,6 +82,8 @@ const handleAuth = async () => {
     } else {
       onClose();
       setIsAuthenticated?.(true);
+      navigate('/');
+      // ===> Navigate to the homepage
     }
   }
 

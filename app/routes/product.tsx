@@ -71,7 +71,7 @@ export default function ProductPage() {
 
     setProfile({ ...profile, cart: updatedCart }); // update local state
     console.log("Product added to cart:", id);
-    fetchProfile(profile.user_id); // Refresh profile to get updated cart
+    if(isAuthenticated) fetchProfile(profile.user_id); // Refresh profile to get updated cart
     setCart(updatedCart); // Update local cart state
   };
 
