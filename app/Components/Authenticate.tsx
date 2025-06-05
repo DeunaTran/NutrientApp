@@ -10,13 +10,15 @@ import {
 } from '@headlessui/react';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router';
 import supabase from 'utils/supabase';
 interface AuthenticateProps {
   isOpen: boolean;
   onClose: () => void;
+  setIsAuthenticated?: (isAuth: boolean) => void;
 }
 
-export default function Authenticate({ isOpen, onClose }: AuthenticateProps) {
+export default function Authenticate({ isOpen, onClose, setIsAuthenticated }: AuthenticateProps) {
     const [isRegister, setIsRegister] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,9 +27,9 @@ export default function Authenticate({ isOpen, onClose }: AuthenticateProps) {
     const [fullName, setFullName] = useState('');
     const [phone, setPhone] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
     
-
-
+    
 const handleAuth = async () => {
   setLoading(true);
   setErrorMsg('');
@@ -66,6 +68,8 @@ const handleAuth = async () => {
       setErrorMsg(error.message);
     } else {
       onClose();
+      navigate('/emailConfirmationWaiting');
+      setIsAuthenticated?.(true);
     }
   } else {
     const { error } = await supabase.auth.signInWithPassword({
@@ -77,6 +81,7 @@ const handleAuth = async () => {
       setErrorMsg(error.message);
     } else {
       onClose();
+      setIsAuthenticated?.(true);
     }
   }
 

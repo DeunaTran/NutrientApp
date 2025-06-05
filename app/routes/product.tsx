@@ -14,6 +14,7 @@ import LoginSale from "~/Components/LoginSale";
 import HeaderBannerPage from "~/Components/HeaderBannerPage";
 import { ProductIntroBox } from "~/Components/ProductIntroBox";
 import Authenticate from "~/Components/Authenticate";
+import SizeChart from "~/Components/SizeChart";
 
 
 export default function ProductPage() {
@@ -170,13 +171,14 @@ export default function ProductPage() {
   }, [product]);
   const [isAdd, setIsAdd] = useState(true);
   
-  const sizes = ["XS", "S", "M", "L", "XL"]; // Add or modify sizes as needed
+  const sizesShort = [ "M", "L", "XL", "XXL"]; // Add or modify sizes as needed
+  const sizesShirt = ["S", "M", "L", "XL", "XXL"]; // Add or modify sizes as needed
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const colors = [
     { name: "Black", value: "#000000" },
     { name: "Gray", value: "#A9A9A9" },        // or "#808080" for standard gray
-    { name: "Light Green", value: "#90EE90" }, // pastel/light green
+    // { name: "Light Green", value: "#90EE90" }, // pastel/light green
   ];
 
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -284,7 +286,7 @@ export default function ProductPage() {
                 </div>
                 <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400">Size: </p>
                 <div className="flex flex-row gap-2 items-left bg-white text-black font-thin max-w-4xl mx-auto">
-                  {sizes.map((size) => (
+                  {(product.name.includes("Shorts") ?  sizesShort : sizesShirt).map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
@@ -298,7 +300,9 @@ export default function ProductPage() {
                     </button>
                   ))}
                 </div>
-                <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400 underline cursor-pointer">Size Guide</p>
+                {/* <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400 underline cursor-pointer">Size Guide</p> */}
+                <SizeChart productName={product.name} />
+
                 <div className="bg-black text-white text-center p-3 text-xs mt-5 cursor-pointer"
                   onClick={() => {
                     if (!selectedSize || !selectedColor) {
@@ -321,20 +325,6 @@ export default function ProductPage() {
 
         <ProductInfoBox description={product.description}/>
         <ProductIntroBox introduction={product.introduction} />
-        {/* <div className="bg-gray-300 col-span-2 text-sm text-center  text-black font-thin max-w-4xl mx-auto p-6 py-10">
-            <h2 className="text-lg font-light mb-2">Ice-Skin™ Fabrication</h2>
-            <p>
-              Ice-Skin™ is a performance fabric utilizing Creora® Coolwave technology, an innovative performance fabric developed by Hyosung®. Featuring advanced hydrophilic polymer technology for superior moisture management. Designed to absorb moisture 1.5 times more efficiently than nylon, it ensures rapid evaporation and a cooling effect during high-intensity activities. Ice-Skin™ offers all-season temperature regulation, making it the ultimate choice for athletes seeking comfort and performance in any climate.
-            </p>
-        </div> */}
-
-        {/* <JsonDisclosure json={[
-            {
-                title: "Mô tả sản phẩm",
-                content: product.description,
-                defaultOpen: true
-            },
-        ]} /> */}
         <div className="col-span-2">
           <Footer/>
         </div>

@@ -6,26 +6,26 @@ type FooterItem = {
 
 const content: Record<string, FooterItem[]> = {
   Company: [
-    { name: "About us", href: "https://www.facebook.com/anhngunewzealand" },
-    { name: "Career", href: "https://www.facebook.com/anhngunewzealand" },
-    { name: "Blog", href: "https://www.nzec.edu.vn/#/blog/" },
-    { name: "Partnerships", href: "https://www.facebook.com/anhngunewzealand" },
+    { name: "About us", href: "#" },
+    { name: "Career", href: "https://www.instagram.com/gapz.gz/" },
+    { name: "Instagram", href: "https://www.instagram.com/gapz.gz/" },
+    { name: "Partnerships", href: "https://www.instagram.com/gapz.gz/" },
   ],
   Community: [
-    { name: "Team plans", href: "#" },
-    { name: "Share", href: "https://www.nzec.edu.vn/" },
+    { name: "Team plans", href: "https://www.instagram.com/gapz.gz/" },
+    { name: "Share", href: "https://www.instagram.com/gapz.gz/" },
   ],
   Teaching: [
-    { name: "Become a Sponsor", href: "https://www.facebook.com/anhngunewzealand" },
-    { name: "User Help Center", href: "https://www.facebook.com/anhngunewzealand" },
-    { name: "Rules & Requirements", href: "https://www.facebook.com/anhngunewzealand" },
+    { name: "Become a Sponsor", href: "https://www.instagram.com/gapz.gz/" },
+    { name: "User Help Center", href: "https://www.instagram.com/gapz.gz/" },
+    { name: "Rules & Requirements", href: "https://www.instagram.com/gapz.gz/" },
   ],
   Test: [
-    { name: "Help Center", href: "" },
-    { name: "Clothes Service", href: "https://www.nzec.edu.vn/#/blog/" },
-    { name: "Exercise", href: "https://www.nzec.edu.vn/#/workspace/dashboard/" },
-    { name: "Material", href: "https://www.nzec.edu.vn/#/workspace/resources/" },
-    { name: "Workshops", href: "https://www.nzec.edu.vn/" },
+    { name: "Help Center", href: "https://www.instagram.com/gapz.gz/" },
+    { name: "Clothes Service", href: "https://www.instagram.com/gapz.gz/" },
+    // { name: "Exercise", href: "https://www.nzec.edu.vn/#/workspace/dashboard/" },
+    { name: "Material", href: "https://www.instagram.com/gapz.gz/" },
+    // { name: "Workshops", href: "https://www.nzec.edu.vn/" },
   ],
 };
 

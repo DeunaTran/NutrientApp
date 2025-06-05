@@ -9,7 +9,7 @@ type CookiesProps = {
 
 const LoginSale: FC<CookiesProps> = ({ isOpen, setIsOpen, setAuthOpen }) => {
   return (
-    <div className='fixed  rounded-lg  md:w-48 backdrop-blur-3xl bottom-0 left-0 right-0 z-50 bg-gray-300 font-light text-xs text-black m-4  shadow-2xl'>
+    <div className='fixed  rounded-lg  md:w-48 backdrop-blur-3xl bottom-0 left-0 right-0 z-20 bg-gray-300 font-light text-xs text-black m-4  shadow-2xl'>
 
       {isOpen && <div className='flex flex-col items-center justify-center px-7 '>
          <button

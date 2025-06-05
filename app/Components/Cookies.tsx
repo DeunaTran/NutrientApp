@@ -17,7 +17,7 @@ const Cookies: FC<CookiesProps> = ({ isOpen, setIsOpen }) => {
           animate={{ x: 0 }}
           exit={{ x: '-100%' }}
           transition={{ type: 'tween', duration: 0.4 }}
-          className='fixed backdrop-blur-3xl md:w-2xl bottom-0 left-0 right-0 z-50 bg-white font-light text-xs text-black m-4 shadow-lg rounded-lg'
+          className='fixed backdrop-blur-3xl md:w-2xl bottom-0 left-0 right-0 z-20 bg-white font-light text-xs text-black m-4 shadow-lg rounded-lg'
         >
           <div className='relative flex flex-col items-center justify-center p-4'>
             <p>

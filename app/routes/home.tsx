@@ -150,7 +150,7 @@ export default function Home() {
     <div className="bg-white">
       <LoginSale isOpen={isLoginSaleOpen} setIsOpen={setIsLoginSaleOpen} setAuthOpen={setAuthOpen} />
       <HeaderBannerPage isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} />
-      <Authenticate isOpen={authOpen} onClose={() => setAuthOpen(false)} />
+      <Authenticate isOpen={authOpen} onClose={() => setAuthOpen(false)} setIsAuthenticated={setIsAuthenticated} />
       <Cookies isOpen={isCookiesOpen} setIsOpen={setIsCookiesOpen} />
       <HomeCarousel />
 
