@@ -3,24 +3,24 @@ import supabase  from "utils/supabase"; // Ensure this points to your Supabase c
 
 const ScrollVideo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-//   const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
-// useEffect(() => {
-//   const fetchVideoUrl = async () => {
-//     const { data } = supabase
-//       .storage
-//       .from("videos")
-//       .getPublicUrl("GAPZ-2-0418.mp4");
+useEffect(() => {
+  const fetchVideoUrl = async () => {
+    const { data } = supabase
+      .storage
+      .from("videos")
+      .getPublicUrl("GAPZ-2-0418.mp4");
 
-//     if (data && data.publicUrl) {
-//       setVideoUrl(data.publicUrl);
-//     } else {
-//       console.error("Failed to get public URL");
-//     }
-//   };
+    if (data && data.publicUrl) {
+      setVideoUrl(data.publicUrl);
+    } else {
+      console.error("Failed to get public URL");
+    }
+  };
 
-//   fetchVideoUrl();
-// }, []);
+  fetchVideoUrl();
+}, []);
 
 
   useEffect(() => {
@@ -47,19 +47,22 @@ const ScrollVideo: React.FC = () => {
         observer.unobserve(videoRef.current);
       }
     };
-  }, []);
+  }, [videoUrl]);
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4">
-      <video
+      {videoUrl &&
+       <video
         ref={videoRef}
-        src="https://kmaxqaqeyvcvuizuagqi.supabase.co/storage/v1/object/public/videos//GAPZ-2-0418.mp4"
+        src= {videoUrl} //"https://kmaxqaqeyvcvuizuagqi.supabase.co/storage/v1/object/public/videos//GAPZ-2-0418.mp4"
         muted
         loop
         playsInline
+        autoPlay
         className="w-full rounded-lg shadow-lg"
         controls={false}
       />
+      }
     </div>
   );
 };
