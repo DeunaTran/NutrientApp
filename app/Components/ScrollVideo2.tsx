@@ -49,9 +49,10 @@ const ScrollVideo2: React.FC = () => {
       <video
         ref={videoRef}
         src="https://kmaxqaqeyvcvuizuagqi.supabase.co/storage/v1/object/public/videos//GAPZ-1H-0418.mp4"
-        muted
+        autoPlay       // ✅ Necessary to allow autoplay behavior
+        muted          // ✅ Required for autoplay to work
+        playsInline    // ✅ Prevents full-screen on iOS
         loop
-        playsInline
         className="w-full rounded-lg shadow-lg"
         controls={false}
       />

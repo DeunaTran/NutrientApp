@@ -14,7 +14,6 @@ useEffect(() => {
 
     if (data && data.publicUrl) {
       setVideoUrl(data.publicUrl);
-      alert("Video URL retrieved");
     } else {
       console.error("Failed to get public URL");
     }
@@ -64,7 +63,7 @@ useEffect(() => {
         playsInline    // ✅ Prevents full-screen on iOS
         loop
         className="w-full rounded-lg shadow-lg"
-        controls={true}
+        controls={false}
       />
       }
     </div>
