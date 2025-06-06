@@ -14,6 +14,7 @@ useEffect(() => {
 
     if (data && data.publicUrl) {
       setVideoUrl(data.publicUrl);
+      alert("Video URL retrieved");
     } else {
       console.error("Failed to get public URL");
     }
@@ -54,13 +55,16 @@ useEffect(() => {
       {videoUrl &&
        <video
         ref={videoRef}
-        src= {videoUrl} //"https://kmaxqaqeyvcvuizuagqi.supabase.co/storage/v1/object/public/videos//GAPZ-2-0418.mp4"
-        muted
+        src= "https://kmaxqaqeyvcvuizuagqi.supabase.co/storage/v1/object/public/videos//GAPZ-2-0418.mp4"
+        // muted
+        // loop
+        // playsInline
+        autoPlay       // ✅ Necessary to allow autoplay behavior
+        muted          // ✅ Required for autoplay to work
+        playsInline    // ✅ Prevents full-screen on iOS
         loop
-        playsInline
-        autoPlay
         className="w-full rounded-lg shadow-lg"
-        controls={false}
+        controls={true}
       />
       }
     </div>
