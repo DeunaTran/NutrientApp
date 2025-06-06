@@ -163,7 +163,7 @@ export default function Home() {
       </div>
       <div className="flex justify-center items-center  mb-10">
         <button
-          className="bg-black text-white px-10 py-2  font-semibold transition-colors hover:bg-gray-800"
+          className="bg-gray-800 md:w-sm w-full mx-8 cursor-pointer text-white px-10 py-2  font-semibold transition-colors hover:bg-black"
           onClick={() => setIsCartOpen(true)}
         >
           View Cart

@@ -11,6 +11,7 @@ export interface Product {
   nickname: string;
   introduction: string;
   code: string;
+  sideInfo: Record<string, string>;
 }
 export type User = {
   id: string;

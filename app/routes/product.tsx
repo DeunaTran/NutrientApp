@@ -225,7 +225,7 @@ export default function ProductPage() {
             </div>
         </div>
         <div className="md:mt-0 md:grid md:grid-cols-3 bg-white text-black items-center font-thin gap-1 flex flex-col text-center max-w-4xl mx-auto p-6 py-1">
-            <div className="flex gap-1 flex-row md:flex-col">
+            <div className="flex gap-1 md:row-span-2 flex-row md:flex-col">
               {product.imgList.map((img: string, index: number) => (
                 <div
                   key={index}
@@ -303,6 +303,13 @@ export default function ProductPage() {
                 </div>
               </div>
             </div>
+            
+
+        <div className="col-span-3">
+
+        <JsonDisclosure json={product?.sideInfo} />
+        </div>
+
         </div>
 
 

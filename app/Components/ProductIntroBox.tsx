@@ -24,12 +24,19 @@ export const ProductIntroBox = ({ introduction }: { introduction: string }) => {
         <div
           key={index}
           id={`intro-feature-${index}`}
-          className="bg-gray-300 md:col-span-2 my-2 text-sm text-center text-black font-thin max-w-4xl mx-auto p-6 py-10 rounded-md shadow-md"
+          className="bg-gray-300 md:col-span-2 my-2 text-sm text-center text-black font-extralight max-w-4xl mx-auto p-6 py-10 rounded-md shadow-md"
         >
           <h2 className="text-lg font-light mb-2">{feature.title}</h2>
           <p>{feature.description}</p>
         </div>
       ))}
+      <div
+          
+          className=" md:col-span-2 my-2 text-lg text-center text-black font-serif max-w-4xl mx-auto p-6 py-10 rounded-md "
+        >
+          " Vì với GapZ, mỗi sợi vải không chỉ tạo nên sản phẩm – mà là tạo nên cảm hứng chuyển động "
+        </div>
+      
     </>
   )
 };

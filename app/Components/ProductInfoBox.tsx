@@ -2,6 +2,7 @@ import { SiMaterialformkdocs } from "react-icons/si";
 import { IoWaterOutline } from "react-icons/io5";
 import { PiVectorThreeThin } from "react-icons/pi";
 import { MdOutlineFiberSmartRecord } from "react-icons/md";
+import { GiFeather } from "react-icons/gi";
 
 function descriptionToJson(description: string): { title: string; description: string }[] {
   return description
@@ -23,6 +24,7 @@ const icons = [
   IoWaterOutline,
   PiVectorThreeThin,
   MdOutlineFiberSmartRecord,
+  GiFeather,
 ];
 
 export const ProductInfoBox = ({ description }: { description: string }) => {

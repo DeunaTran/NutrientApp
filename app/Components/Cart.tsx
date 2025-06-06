@@ -14,6 +14,7 @@ import { CiBank, CiDiscount1 } from "react-icons/ci";
 import { TbTruckDelivery } from "react-icons/tb";
 import { AiOutlineTruck } from 'react-icons/ai';
 import { RiBankCardLine } from "react-icons/ri";
+import { LuSave } from "react-icons/lu";
 
 const provinces = [
   'Hà Nội',
@@ -98,26 +99,32 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
         { name: "Black", value: "#000000" },
         { name: "White", value: "#FFFFFF" },        // or "#808080" for standard gray
     ];
-    const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const vouchers = [
     {
-        title: "Voucher cho người mới đăng ký (còn 17)",
-        description: "Giảm 30K FreeShip cho đơn đầu tiên",
+        title: "NEWZ - FreeShip",
+        description: "Voucher giảm 30K FreeShip cho đơn đầu tiên",
         expiry: "HSD: 30/6/2025",
         minimumPurchase: 100000, // Minimum purchase amount to apply this voucher
         discount: 30000, // Discount amount for this voucher
     },
-    {
-        title: "Voucher cuối tuần",
-        description: "Giảm 50K cho đơn từ 999K",
-        expiry: "HSD: 15/7/2025",
-        minimumPurchase: 999000, // Minimum purchase amount to apply this voucher
-        discount: 50000, // Discount amount for this voucher
-    },
+    // {
+    //     title: "Voucher cuối tuần",
+    //     description: "Giảm 50K cho đơn từ 999K",
+    //     expiry: "HSD: 15/7/2025",
+    //     minimumPurchase: 999000, // Minimum purchase amount to apply this voucher
+    //     discount: 50000, // Discount amount for this voucher
+    // },
     ];
     const [voucherCode, setVoucherCode] = useState("");
     const [totalPurchase, setTotalPurchase] = useState(0);
     const [totalDiscount, setTotalDiscount] = useState(0);
+    const [isVoucher, setIsVoucher] = useState("");
+    const [isFreeShip, setIsFreeShip] = useState(false);
+    const [finalCost, setFinalCost] = useState(0);
+
+    useEffect(()=>{
+        setFinalCost(((isAuth || isVoucher !== "") ? totalPurchase*9/10 : totalPurchase) + (isFreeShip ? 0 : 30000) )
+    }, [isAuth, isVoucher, totalPurchase, isFreeShip]);
 
     function updateProfile(newCart: Record<string, CartItem>){
         setProfile({ ...profile, cart: newCart });
@@ -184,8 +191,6 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
         }
         else {
         console.log("No user is in header space.");
-        // setOpenAuthModal();
-        // setProfile({cart:{}, user_id: "", created_at:"" })
         }
     });
     }, [isAuth]);
@@ -319,7 +324,7 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                 <div className="flex  max-h-screen pb-20 overflow-y-auto flex-col items-start space-y-2 p-4">
                     <div className="flex flex-row px-2 w-full justify-between items-stretch"> 
                         {!isAuth && <button
-                        className="py-1 px-2 border rounded-sm w-full text-center"
+                        className="py-1 md:w-lg cursor-pointer hover:bg-black hover:text-white transition duration-300 px-2 border rounded-sm w-full text-center"
                             onClick={setOpenAuthModal} >
                         Đăng nhập tài khoản
                         </button>}
@@ -450,9 +455,11 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                         <button
                                         className="text-gray-500 underline text-xs"
                                         onClick={() => {
-                                            const newCart = { ...profile?.cart };
-                                            delete newCart[cartKey];
-                                            deleteCartItem(cartKey);
+                                            // const newCart = { ...profile?.cart };
+                                            // delete newCart[cartKey];
+                                            // deleteCartItem(cartKey);
+                                            updateProductQuantity(cartKey, 0, cartItem.color);
+
                                         }}
                                         >
                                         Xóa
@@ -469,12 +476,17 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                     <div
                                     key={index}
                                     className={clsx(
-
-                                        "flex w-[360px] min-w-[300px] flex-row rounded-lg px-4 shadow-md",
-                                        (isAuth && 150000> voucher.minimumPurchase)  ? "bg-gray-200" : "bg-gray-50 backdrop-blur-2xl"
+                                        "flex w-[360px] cursor-pointer  hover:bg-gray-200 duration-300  min-w-[300px] flex-row rounded-lg px-4 shadow-md",
+                                        (isFreeShip )  ? "bg-gray-200" : "bg-gray-50 backdrop-blur-2xl"
                                     )}
+                                    onClick={()=>{
+                                        if(!isAuth){
+                                            setOpenAuthModal();
+                                        }
+                                        else setIsFreeShip(true);
+                                    }}
                                     >
-                                    <div className="border-r border-gray-600 my-2" />
+                                        <div className="border-r border-gray-600 my-2" />
                                         <div className="flex flex-col items-start justify-center pl-2 py-3">
                                             <span className="text-sm font-medium">{voucher.title}</span>
                                             <span className="text-xs text-gray-700">{voucher.description}</span>
@@ -483,6 +495,7 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                     </div>
                                 ))}
                             </div>
+                            <div className='text-xs font-serif'>{isFreeShip ? "#Bạn đã được tặng 1 voucher freeship khi là thành viên của Gapz": "#Hãy đăng nhập để tận hưởng GAPZ freeship"}</div>
                             
                             <div className="flex flex-row  gap-2 justify-between items-center w-full ">  
                                 <Input
@@ -502,6 +515,11 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                     'focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
                                     voucherCode == "" ? "bg-gray-400" : "bg-black cursor-pointer"
                                 )}
+                                onClick={()=>{
+                                    if(influencers.some(influencer => influencer.code === voucherCode)){
+                                        setIsVoucher(voucherCode);
+                                    }
+                                }}
                                 >
                                     Áp dụng Voucher
                                 </button>
@@ -514,13 +532,18 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                 .filter(influencer => influencer.code === voucherCode)
                                 .map(influencer => (
                                     <span key={influencer.full_name}>
-                                    🎉 Congratulations! You have got the voucher code from: {influencer.full_name}
+                                    🎉 Chúc mừng! Bạn đã có mã code của {influencer.full_name}
                                     </span>
                                 ))
                             ) : (
-                                <span>No code from your influencer found!</span>
+                                <span>Chưa tìm thấy mã code của bạn!</span>
                             )}
                             </p>
+                            <div className=' flex flex-row gap-1 text-xs font-light text-center px-4'>
+                                {isVoucher !== "" && <LuSave />}
+                                {isVoucher !== ""? "Đã lưu mã code của bạn" : ""}
+                            </div>
+
 
 
                             <div className="flex w-full gap-2 text-sm  font-semibold flex-col px-4">
@@ -535,13 +558,13 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                 <div className="flex flex-row justify-between items-center w-full px-2 py-2">
                                     <span className=" ">Giảm giá</span>
                                     <span className="">
-                                        {totalDiscount.toLocaleString("vi-VN") + " đ"} 
+                                        -{ ((isAuth || isVoucher !== "") ? totalPurchase*1/10 : 0).toLocaleString("vi-VN") + " đ"  }
                                     </span>
                                 </div>
                                 <div className="flex flex-row justify-between items-center w-full px-2 py-2">
                                     <span className=" ">Phí giao hàng</span>
                                     <span className="">
-                                        Miễn phí
+                                        {isFreeShip? "Miễn phí" : "30.000đ"}
                                     </span>
                                 </div>
                                 <div className='border w-full border-gray-200'></div>
@@ -551,9 +574,11 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                     <div className=" flex flex-col items-end ">
                                         <span className="text-xs text-gray-500"> (Đã bao gồm VAT) </span>
                                         <span className="font-semibold ">
-                                        {totalPurchase - totalDiscount > 0 ? (totalPurchase - totalDiscount).toLocaleString("vi-VN") + " đ" : "0 đ"}
+                                        {/* {totalPurchase - totalDiscount > 0 ? (totalPurchase - totalDiscount).toLocaleString("vi-VN") + " đ" : "0 đ"} */}
+                                        {/* {((isAuth || isVoucher !== "") ? totalPurchase*9/10 : totalPurchase).toLocaleString("vi-VN")}   " đ"  */}
+                                        { finalCost.toLocaleString("vi-VN") + " đ"  }
                                         </span>
-                                        <span className="text-xs font-light text-red-800"> (Đã giảm {totalDiscount} trên giá gốc) </span>
+                                        <span className="text-xs font-light text-red-800"> (Đã giảm { ((isAuth || isVoucher !== "") ? totalPurchase*1/10 : 0).toLocaleString("vi-VN") + " đ"  } trên giá gốc) </span>
                                     </div>
                                 </div>
 
@@ -676,14 +701,6 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                     </>
                                 }
 
-                                {/* <select
-                                    className="w-full border border-gray-300 rounded px-3 py-1"
-                                    value={paymentMethod}
-                                    onChange={(e) => setPaymentMethod(e.target.value)}
-                                >
-                                    <option value="cash">Thanh toán khi nhận hàng</option>
-                                    <option value="credit">Thẻ tín dụng/Ghi nợ</option>
-                                </select> */}
                             </div>
                             
                         </div>
@@ -708,7 +725,9 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                     <p className='text-sm   font-light gap-2 text-gray-800'>
                                         Thành tiền
                                         <span className='text-blue-500 text-xl font-bold'>
-                                        { totalPurchase - totalDiscount > 0 ? (totalPurchase - totalDiscount).toLocaleString("vi-VN") + " đ" : "0 đ"}
+                                        { finalCost.toLocaleString("vi-VN") + " đ"  }
+
+                                        {/* { totalPurchase - totalDiscount > 0 ? (totalPurchase - totalDiscount).toLocaleString("vi-VN") + " đ" : "0 đ"} */}
                                         </span>
                                     </p>
                                     <p className='text-xs text-gray-500 font-light'> Nhận ngay Voucher 20%  khi mua đơn đầu tiên</p>
