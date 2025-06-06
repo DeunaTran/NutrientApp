@@ -29,7 +29,6 @@ export default function ProductPage() {
   }); 
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [cart, setCart] = useState<Record<string, CartItem>>({});
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
@@ -66,10 +65,8 @@ export default function ProductPage() {
 
 
   const handleAddToCart = async (id: string | number, size: string, color: string) => {
-    if (!profile) return;
 
     const cartKey = `${id}_${size}`;
-    
     // If item already exists, do nothing
     if (profile.cart[cartKey]) {
       console.log("Item already in cart:", cartKey);
@@ -83,21 +80,20 @@ export default function ProductPage() {
         color: color
       }
     };
+    console.log("Product added to cart: ____ ", cartKey);
 
-    const { error } = await supabase
-      .from("Profile")
-      .update({ cart: updatedCart })
-      .eq("user_id", profile.user_id);
+    // const { error } = await supabase
+    //   .from("Profile")
+    //   .update({ cart: updatedCart })
+    //   .eq("user_id", profile.user_id);
 
-    if (error) {
-      console.error("Error updating cart:", error.message);
-      return;
-    }
+    // if (error) {
+    //   console.error("Error updating cart:", error.message);
+    //   return;
+    // }
 
     setProfile({ ...profile, cart: updatedCart });
     updateProfile(updatedCart)
-    setCart(updatedCart);
-    console.log("Product added to cart:", cartKey);
 
     if (isAuthenticated) {
       fetchProfile(profile.user_id); // Optionally refresh profile
@@ -124,7 +120,6 @@ export default function ProductPage() {
     setProfile({ ...profile, cart: updatedCart }); // update local state
     console.log("Product removed from cart:", id);
     fetchProfile(profile.user_id); // Refresh profile to get updated cart
-    setCart(updatedCart); // Update local cart state
   };
 
   useEffect(() => {
@@ -164,7 +159,7 @@ export default function ProductPage() {
       
     } else {
       setProfile(data);
-      setCart(data.cart || {}); // Ensure cart is set from profile
+      // setCart(data.cart || {}); // Ensure cart is set from profile
       console.log("Profile fetched successfully:", data);
     }
     setLoadingProfile(false);

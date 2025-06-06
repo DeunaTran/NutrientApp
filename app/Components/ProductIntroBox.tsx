@@ -17,7 +17,6 @@ function descriptionToJson(description?: string): { title: string; description: 
 
 export const ProductIntroBox = ({ introduction }: { introduction: string }) => {
   const features = descriptionToJson(introduction);
-  console.log("Parsed Features:", features);
 
   return (
     <>

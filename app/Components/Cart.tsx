@@ -150,6 +150,7 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
         }, 0);
         setTotalDiscount(totalDiscount);
     }
+    console.log("Profile: ", profile);
     }, [profile]);
 
     useEffect(() => {
@@ -164,7 +165,7 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
         console.error("Error fetching influencers:", error.message);
         } else {
         setInfluencers(data || []);
-        console.log("Influencers: ", data);
+        // console.log("Influencers: ", data);
         }
     };
 
@@ -183,8 +184,8 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
         }
         else {
         console.log("No user is in header space.");
-        setOpenAuthModal();
-        setProfile({cart:{}, user_id: "", created_at:"" })
+        // setOpenAuthModal();
+        // setProfile({cart:{}, user_id: "", created_at:"" })
         }
     });
     }, [isAuth]);
@@ -597,11 +598,11 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                     />
                                 </div>
                             </div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-0">
+                            <label htmlFor="emailinput" className="block text-sm font-medium text-gray-700 mb-0">
                                 Email
                             </label>
                             <Input
-                            id='email'
+                            id='emailinput'
                             type="text"
                             value={email}
                             placeholder="Theo dõi đơn hàng qua Email"

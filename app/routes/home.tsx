@@ -1,4 +1,3 @@
-import HeaderBanner from "~/Components/HeaderBanner";
 import HomeCarousel from "~/Components/HomeCarousel";
 
 import { useState, useEffect } from "react";
@@ -25,7 +24,7 @@ interface UserProfile {
 
 export default function Home() {
   const [authOpen, setAuthOpen] = useState(false);
-  const [profile, setProfile] = useState<UserProfile | null>({
+  const [profile, setProfile] = useState<UserProfile >({
     cart: {},
     created_at: "",
     user_id: "",
