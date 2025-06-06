@@ -6,8 +6,8 @@ const carouselImages = [
 ];
 
 const carouselImagesMobile = [
-  "https://i.ibb.co/hFq76h2S/1.png",
-  "https://i.ibb.co/0RtKvMnR/2.png",
+  "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//MobileThumbnail1.png",
+  "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//MobileThumbnail2.png",
 ];
 
 export default function HomeCarousel() {

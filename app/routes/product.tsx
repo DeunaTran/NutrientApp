@@ -3,7 +3,7 @@
 import { useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import supabase from "utils/supabase";
-import { type Product } from "~/library/interface";
+import { type CartItem, type Product } from "~/library/interface";
 import HeaderBanner from "~/Components/HeaderBanner";
 import { type UserProfile } from "~/library/interface";
 import JsonDisclosure from "~/Components/JsonDisclosure";
@@ -22,19 +22,33 @@ export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
     const [authOpen, setAuthOpen] = useState(false);
-  const [profile, setProfile] = useState<UserProfile | null>({
+  const [profile, setProfile] = useState<UserProfile>({
     cart: {},
     created_at: "",
     user_id: "",
   }); 
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [cart, setCart] = useState<Record<string | number, number>>({});
+  const [cart, setCart] = useState<Record<string, CartItem>>({});
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
-  const [visibleIndex, setVisibleIndex] = useState(0);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  function updateProfile(newCart: Record<string, CartItem>){
+      setProfile({ ...profile, cart: newCart });
+      if(isAuthenticated){
+          supabase
+              .from("Profile")
+              .update({ cart: newCart })
+              .eq("user_id", profile.user_id)
+              .then(({ error }) => {
+              if (error) console.error("Failed to update cart:", error.message);
+              });
+          console.log("Updated cart:", newCart);
+      }
+  }
+  
 
   const fetchProducts = async () => {
     setLoadingProducts(true);
@@ -51,12 +65,23 @@ export default function ProductPage() {
   };
 
 
-  const handleAddToCart = async (id: string | number) => {
+  const handleAddToCart = async (id: string | number, size: string, color: string) => {
     if (!profile) return;
 
+    const cartKey = `${id}_${size}`;
+    
+    // If item already exists, do nothing
+    if (profile.cart[cartKey]) {
+      console.log("Item already in cart:", cartKey);
+      return;
+    }
+
     const updatedCart = {
-      ...(profile.cart || {}),
-      [id]: 1, // or you can use true or a quantity
+      ...profile.cart,
+      [cartKey]: {
+        quantity: 1,
+        color: color
+      }
     };
 
     const { error } = await supabase
@@ -69,10 +94,14 @@ export default function ProductPage() {
       return;
     }
 
-    setProfile({ ...profile, cart: updatedCart }); // update local state
-    console.log("Product added to cart:", id);
-    if(isAuthenticated) fetchProfile(profile.user_id); // Refresh profile to get updated cart
-    setCart(updatedCart); // Update local cart state
+    setProfile({ ...profile, cart: updatedCart });
+    updateProfile(updatedCart)
+    setCart(updatedCart);
+    console.log("Product added to cart:", cartKey);
+
+    if (isAuthenticated) {
+      fetchProfile(profile.user_id); // Optionally refresh profile
+    }
   };
 
 
@@ -172,13 +201,11 @@ export default function ProductPage() {
   const [isAdd, setIsAdd] = useState(true);
   
   const sizesShort = [ "M", "L", "XL", "XXL"]; // Add or modify sizes as needed
-  const sizesShirt = ["S", "M", "L", "XL", "XXL"]; // Add or modify sizes as needed
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const colors = [
     { name: "Black", value: "#000000" },
-    { name: "Gray", value: "#A9A9A9" },        // or "#808080" for standard gray
-    // { name: "Light Green", value: "#90EE90" }, // pastel/light green
+    { name: "White", value: "#FFFFFF" },        // or "#808080" for standard gray
   ];
 
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -226,40 +253,7 @@ export default function ProductPage() {
             </div>
             <div className="md:col-span-2">
               <div className="flex flex-row justify-center items-center w-full">
-                  {/* <div></div> */}
-                  <h2 className="text-xs  text-center text-white bg-black font-bold p-1 w-18">VSPGAP-{product.id}</h2>
-                      {/* {cart[product.id] ? (
-                      <button
-                        className="text-black font-light rounded-lg cursor-pointer"
-                        onClick={() => handleRemoveFromCart(product.id)}
-                        title="Remove from Cart"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                          <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.25 5.507v11.561L5.853 2.671c.15-.043.306-.075.467-.094a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93ZM3.75 21V6.932l14.063 14.063L12 18.088l-7.165 3.583A.75.75 0 0 1 3.75 21Z" />
-                        </svg>
-                      </button>
-                    ) : (
-                      <button
-                        className="text-black font-light rounded-lg cursor-pointer"
-                        onClick={() => handleAddToCart(product.id)}
-                        title="Add to Cart"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-6 h-6"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"
-                          />
-                        </svg>
-                      </button>
-                    )} */}
+                  <h2 className="text-xs  text-center text-white bg-black font-bold p-1 w-18">{product.code}</h2>
               </div>
               <h1 className=" text-2xl font-thin ">{product.name}</h1>
               <h1 className=" text-sm font-thin ">{product.nickname}</h1>
@@ -286,7 +280,7 @@ export default function ProductPage() {
                 </div>
                 <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400">Size: </p>
                 <div className="flex flex-row gap-2 items-left bg-white text-black font-thin max-w-4xl mx-auto">
-                  {(product.name.includes("Shorts") ?  sizesShort : sizesShirt).map((size) => (
+                  {sizesShort.map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
@@ -300,21 +294,15 @@ export default function ProductPage() {
                     </button>
                   ))}
                 </div>
-                {/* <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400 underline cursor-pointer">Size Guide</p> */}
                 <SizeChart productName={product.name} />
-
                 <div className="bg-black text-white text-center p-3 text-xs mt-5 cursor-pointer"
                   onClick={() => {
                     if (!selectedSize || !selectedColor) {
                       alert("Please select a size and color before adding to cart.");
                       return;
                     }
-                    handleAddToCart(product.id);
-                    // setIsAdd(true);
+                    handleAddToCart(product.id, selectedSize, selectedColor);
                     setIsCartOpen(true);
-                    // setTimeout(() => {
-                    //   setIsAdd(false);
-                    // }, 2000);
                   }}
                   > ADD TO CART 
                 </div>

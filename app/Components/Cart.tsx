@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';   
 import { Input } from "@headlessui/react";
 import clsx from 'clsx';
-import type { AuthenticateProps } from '~/library/interface';
+import type { AuthenticateProps, CartItem, Influencer } from '~/library/interface';
 import supabase from 'utils/supabase';
 import type { Product } from '~/library/interface';
 import { motion, AnimatePresence } from "framer-motion";
@@ -84,7 +84,6 @@ const provinces = [
 export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuthModal, profile, products} : AuthenticateProps) {   
 
 
-
     const [user, setUser] = useState<any>(null);
     const [fullName, setFullName] = useState( "");
     const [address, setAddress] = useState(profile?.address || "");
@@ -93,16 +92,16 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
     const [paymentMethod, setPaymentMethod] = useState("cash");
     const [loading, setLoading] = useState(false);
     const [province, setProvince] = useState('');
+    const [influencers, setInfluencers] = useState<Influencer[]>([]);
     const sizes= [ "M", "L", "XL", "XXL"]; // Add or modify sizes as needed
-    const [selectedSize, setSelectedSize] = useState<string | null>(null);
-      const colors = [
-    { name: "Black", value: "#000000" },
-    // { name: "Light Green", value: "#90EE90" }, // pastel/light green
-  ];
+    const colors = [
+        { name: "Black", value: "#000000" },
+        { name: "White", value: "#FFFFFF" },        // or "#808080" for standard gray
+    ];
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const vouchers = [
     {
-        title: "Voucher cho người mới (còn 17)",
+        title: "Voucher cho người mới đăng ký (còn 17)",
         description: "Giảm 30K FreeShip cho đơn đầu tiên",
         expiry: "HSD: 30/6/2025",
         minimumPurchase: 100000, // Minimum purchase amount to apply this voucher
@@ -110,24 +109,37 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
     },
     {
         title: "Voucher cuối tuần",
-        description: "Giảm 50K cho đơn từ 299K",
+        description: "Giảm 50K cho đơn từ 999K",
         expiry: "HSD: 15/7/2025",
-        minimumPurchase: 299000, // Minimum purchase amount to apply this voucher
+        minimumPurchase: 999000, // Minimum purchase amount to apply this voucher
         discount: 50000, // Discount amount for this voucher
-
     },
-    // Add more vouchers as needed
     ];
     const [voucherCode, setVoucherCode] = useState("");
     const [totalPurchase, setTotalPurchase] = useState(0);
     const [totalDiscount, setTotalDiscount] = useState(0);
 
+    function updateProfile(newCart: Record<string, CartItem>){
+        setProfile({ ...profile, cart: newCart });
+        if(isAuth){
+            supabase
+                .from("Profile")
+                .update({ cart: newCart })
+                .eq("user_id", profile.user_id)
+                .then(({ error }) => {
+                if (error) console.error("Failed to update cart:", error.message);
+                });
+            console.log("Updated cart:", newCart);
+        }
+    }
+
     useEffect(() => {
     if (profile) {
         // Calculate total purchase amount from the cart
-        const total = Object.entries(profile.cart || {}).reduce((sum, [productId, quantity]) => {
-            const product = products?.find(p => p.id === Number(productId));
-            return sum + (product ? product.price * quantity : 0);
+        const total = Object.entries(profile.cart || {}).reduce((sum, [cartKey, cartItem]) => {
+        const [productId] = cartKey.split("_");
+        const product = products?.find(p => p.id === Number(productId));
+        return sum + (product ? product.price * cartItem.quantity : 0);
         }, 0);
         setTotalPurchase(total);
         const totalDiscount = vouchers.reduce((sum, voucher) => {
@@ -137,10 +149,27 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
             return sum; 
         }, 0);
         setTotalDiscount(totalDiscount);
-
-
-      }
+    }
     }, [profile]);
+
+    useEffect(() => {
+    const fetchInfluencer = async () => {
+    let { data, error } = await supabase
+        .from('Influencer')
+        .select('*')
+    //   const { data, error } = await supabase
+    //     .from("Influencer")
+    //     .select("*")
+        if (error) {
+        console.error("Error fetching influencers:", error.message);
+        } else {
+        setInfluencers(data || []);
+        console.log("Influencers: ", data);
+        }
+    };
+
+    fetchInfluencer();
+  }, []);
 
 
 
@@ -161,33 +190,46 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
     }, [isAuth]);
     
     
-    const updateProductQuantity = (productId: string | number, quantity: number) => {
+const updateProductQuantity = (cartKey: string | number, quantity: number, color: string) => {
     if (!profile) return;
-
     const newCart = { ...profile.cart };
-
     if (quantity <= 0) {
-        delete newCart[productId];
+        delete newCart[cartKey];
     } else {
-        newCart[productId] = quantity;
+        newCart[cartKey] = {quantity, color};
     }
-
-    setProfile({ ...profile, cart: newCart });
-
-    // Optionally update in Supabase:
-    supabase
-        .from("Profile")
-        .update({ cart: newCart })
-        .eq("user_id", profile.user_id)
-        .then(({ error }) => {
-        if (error) console.error("Failed to update cart:", error.message);
-        });
-    console.log("Updated cart:", newCart);
+    updateProfile(newCart)
     };
+
+const updateProductSize = (productId: string | number, oldSize: string, newSize: string, quantity: number, color: string) => {
+    const cartKeyOld = `${productId}_${oldSize}`;
+    const cartKeyNew = `${productId}_${newSize}`;
+    const newCart = { ...profile.cart };
+    delete newCart[cartKeyOld];
+    newCart[cartKeyNew] = { quantity, color };
+
+    updateProfile(newCart)
+    };
+const updateProductColor = (cartKey : string, quantity: number, newColor: string) => {
+    const newCart = { ...profile.cart };
+    delete newCart[cartKey];
+    newCart[cartKey] = { quantity, color: newColor };
+
+    updateProfile(newCart)
+    };
+
+    
+
+
+
+    function deleteCartItem( cartKey: string){
+        const newCart = { ...profile.cart };
+        delete newCart[cartKey];
+    }
       
     const submitOrder = async (
-      profile: { user_id: string; cart: Record<string, number> } | null | undefined,
-      products: Product[],
+      profile: { user_id: string; cart: Record<string, CartItem> } | null | undefined,
+    //   products: Product[],
       payment: string,
       fullName: string,
       address: string,
@@ -286,54 +328,73 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
                     </div>
                     <div className=" text-sm px-3 relative md:grid grid-cols-1 md:grid-cols-2 w-full gap-4"> 
                         <div className="flex gap-8 md:pt-20 pt-4 w-full flex-col items-start space-y-2 ">
-                            {products && products.map((product) => {
-                            if (profile?.cart[product.id]) {
+                            {products &&
+                            Object.entries(profile?.cart || {}).map(([cartKey, cartItem]) => {
+                                const [productId, productSize] = cartKey.split("_");
+                                const product = products.find((p) => p.id.toString() === productId);
+                                if (!product) return null;
+
                                 return (
-                                <div key={product.id} className="grid px-3 md:w-full grid-cols-3 w-80  gap-4 items-center">
-                                    <img src={product.img2} alt={product.name} className="h-30 w-30 object-cover " />
-                                    <div className="flex flex-col col-span-2 gap-2 items-start"> 
+                                <div
+                                    key={cartKey}
+                                    className="grid px-3 md:w-full grid-cols-3 w-80 gap-4 items-center"
+                                >
+                                    <img
+                                    src={product.img2}
+                                    alt={product.name}
+                                    className="h-30 w-30 object-cover"
+                                    />
+                                    <div className="flex flex-col col-span-2 gap-2 items-start">
                                     <p className="text-base font-semibold">{product.name}</p>
                                     <p className="text-sm font-light">
-                                        {(product.price * profile.cart[product.id]).toLocaleString("vi-VN")} đ
+                                        {(product.price * cartItem.quantity).toLocaleString("vi-VN")} đ
                                     </p>
 
-                                    <div className="flex flex-row gap-2 items-left bg-white text-black font-thin max-w-4xl mx-auto">
-                                    { sizes.map((size) => (
-                                        <button
-                                        key={size}
-                                        onClick={() => setSelectedSize(size)}
-                                        className={`text-xs font-thin border px-5 py-1 transition-colors duration-200 ${
-                                            selectedSize === size
-                                            ? "bg-black text-white border-black"
-                                            : "bg-white text-black border"
-                                        }`}
-                                        >
-                                        {size}
-                                        </button>
-                                    ))}
-                                    </div>
-
-                                    <div className="flex flex-row gap-1 items-start w-full px-2 bg-white max-w-4xl mx-auto">
+                                    <div className="flex flex-row gap-1 items-left bg-white max-w-4xl mx-auto">
                                     {colors.map((color) => (
                                         <div
                                         key={color.value}
-                                        onClick={() => setSelectedColor(color.value)}
+                                        onClick={() => updateProductColor(cartKey, cartItem.quantity, color.value)}
                                         className={`w-14 h-6  cursor-pointer border-2 ${
-                                            selectedColor === color.value ? "border-black scale-110" : "border-gray-300"
+                                            cartItem.color === color.value ? "border-black scale-110" : "border-gray-300"
                                         }`}
                                         style={{ backgroundColor: color.value }}
                                         />
                                     ))}
                                     </div>
-        
+
+                                    {/* <div className="text-xs text-gray-600">Size: {productSize}</div> */}
+                                    <div className="flex flex-row gap-1">
+                                        {sizes.map((size) => (
+                                            <button
+                                            key={size}
+                                            onClick={() => 
+                                            {   
+                                                if (productSize !== size)
+                                                updateProductSize(productId, productSize, size , cartItem.quantity , cartItem.color)
+                                            }
+                                            }
+                                            className={`text-xs font-thin border px-5 py-1 transition-colors duration-200 ${
+                                                productSize === size
+                                                ? "bg-black text-white border-black"
+                                                : "bg-white text-black border"
+                                            }`}
+                                            >
+                                            {size}
+                                            </button>
+                                        ))}
+
+                                    </div>
+
                                     <div className="flex flex-row justify-between w-full">
                                         <div className="relative w-30 mt-1">
                                         <button
                                             className="absolute h-8 w-8 right-10 top-1 my-auto px-2 flex items-center justify-center bg-white rounded hover:bg-slate-200"
                                             type="button"
-                                            onClick={() =>
-                                            updateProductQuantity(product.id, (profile.cart[product.id] || 0) - 1)
-                                            }
+                                            onClick={() => {
+                                            const currentQty = cartItem.quantity || 0;
+                                            updateProductQuantity(cartKey, currentQty - 1, cartItem.color);
+                                            }}
                                         >
                                             <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -346,22 +407,26 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
                                             </svg>
                                         </button>
-        
+
                                         <input
                                             type="number"
                                             className="w-full pl-4 h-10 pr-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
                                             placeholder="0"
-                                            value={profile.cart[product.id] || 0}
+                                            value={cartItem.quantity}
                                             onChange={(e) =>
-                                            updateProductQuantity(product.id, parseInt(e.target.value) || 0)
+                                            updateProductQuantity(
+                                                cartKey,
+                                                parseInt(e.target.value) || 0,
+                                                cartItem.color
+                                            )
                                             }
                                         />
-        
+
                                         <button
                                             className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center justify-center bg-white rounded hover:bg-slate-200"
                                             type="button"
                                             onClick={() =>
-                                            updateProductQuantity(product.id, (profile.cart[product.id] || 0) + 1)
+                                            updateProductQuantity(cartKey, cartItem.quantity + 1, cartItem.color)
                                             }
                                         >
                                             <svg
@@ -380,24 +445,24 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
                                             </svg>
                                         </button>
                                         </div>
+
                                         <button
                                         className="text-gray-500 underline text-xs"
                                         onClick={() => {
-                                            const newCart = { ...profile.cart };
-                                            delete newCart[product.id];
-                                            setProfile({ ...profile, cart: newCart });
+                                            const newCart = { ...profile?.cart };
+                                            delete newCart[cartKey];
+                                            deleteCartItem(cartKey);
                                         }}
                                         >
-                                        Xóa 
+                                        Xóa
                                         </button>
                                     </div>
                                     </div>
                                     <div className="border border-gray-300 pl-2 col-span-3"> </div>
                                 </div>
                                 );
-                            }
-                            return null;
                             })}
+
                             <div className="flex flex-row overflow-x-auto max-w-full px-2 py-2 font-serif bg-white gap-2 mx-auto scrollbar-hide">
                                 {vouchers.map((voucher, index) => (
                                     <div
@@ -405,9 +470,8 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
                                     className={clsx(
 
                                         "flex w-[360px] min-w-[300px] flex-row rounded-lg px-4 shadow-md",
-                                        150000> voucher.minimumPurchase  ? "bg-gray-200" : "bg-gray-50 backdrop-blur-2xl"
+                                        (isAuth && 150000> voucher.minimumPurchase)  ? "bg-gray-200" : "bg-gray-50 backdrop-blur-2xl"
                                     )}
-                                    // className=
                                     >
                                     <div className="border-r border-gray-600 my-2" />
                                         <div className="flex flex-col items-start justify-center pl-2 py-3">
@@ -439,10 +503,24 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
                                 )}
                                 >
                                     Áp dụng Voucher
-
                                 </button>
+                                {/* <p> {influencers.map(code)- > code == voucherCode ... }</p> */}
 
                             </div>
+                            <p className='text-xs font-light text-center px-4'>
+                            {influencers.some(influencer => influencer.code === voucherCode) ? (
+                                influencers
+                                .filter(influencer => influencer.code === voucherCode)
+                                .map(influencer => (
+                                    <span key={influencer.full_name}>
+                                    🎉 Congratulations! You have got the voucher code from: {influencer.full_name}
+                                    </span>
+                                ))
+                            ) : (
+                                <span>No code from your influencer found!</span>
+                            )}
+                            </p>
+
 
                             <div className="flex w-full gap-2 text-sm  font-semibold flex-col px-4">
                                 <div className='border w-full border-gray-200'></div>
@@ -618,7 +696,7 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
                                     onClick={() => {
                                     console.log("Proceed to checkout");
                                     if (products) {
-                                        submitOrder(profile, products, paymentMethod, fullName, address, phone, email, province);
+                                        submitOrder(profile, paymentMethod, fullName, address, phone, email, province);
                                     }
                                     }}
                                 >
