@@ -13,6 +13,40 @@ export interface Product {
   code: string;
   sideInfo: Record<string, string>;
 }
+export interface Order {
+  id: number;
+  created_at: string; // ISO timestamp
+  user_id: string;
+  cart: Record<string, any>; // You can replace `any` with a more specific type if known
+  payment: string;
+  cost: number;
+  address: string;
+  full_name: string;
+  phone: string;
+  status: string;
+  email: string;
+  tracking_order_code: string;
+}
+
+
+export interface Review {
+  id: number;
+  created_at: string; // ISO 8601 format (e.g., "2025-06-06T12:00:00Z")
+  user_id: string; // UUID
+  product: Record<string, CartItem>; // or define a specific type if product schema is known
+  age: number;
+  full_name: string;
+  height: number;
+  weight: number;
+  province: string;
+  activity: string;
+  workout_frequency: string;
+  star: number;
+  review: string;
+  isApproved: boolean;
+  title: string;
+}
+
 export type User = {
   id: string;
   user_metadata: {

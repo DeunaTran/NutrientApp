@@ -11,14 +11,14 @@ function descriptionToJson(description?: string): { title: string; description: 
         title: key.trim(),
         description: rest.join(":").trim(),
       };
-    })
-    .sort((a, b) => a.title.localeCompare(b.title)); // Sort alphabetically by title;
+    });
+    // .sort((a, b) => a.title.localeCompare(b.title)); // Sort alphabetically by title;
 }
 
 
 export const ProductIntroBox = ({ introduction }: { introduction: string }) => {
   const features = descriptionToJson(introduction);
-  console.log("intro: ", introduction);
+  // console.log("intro: ", introduction);
   return (
     <>
       {features.map((feature, index) => (

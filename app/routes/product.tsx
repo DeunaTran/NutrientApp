@@ -15,6 +15,7 @@ import HeaderBannerPage from "~/Components/HeaderBannerPage";
 import { ProductIntroBox } from "~/Components/ProductIntroBox";
 import Authenticate from "~/Components/Authenticate";
 import SizeChart from "~/Components/SizeChart";
+import { ReviewComponent } from "~/Components/Review";
 
 
 export default function ProductPage() {
@@ -225,96 +226,93 @@ export default function ProductPage() {
             </div>
         </div>
         <div className="md:mt-0 md:grid md:grid-cols-3 bg-white text-black items-center font-thin gap-1 flex flex-col text-center max-w-4xl mx-auto p-6 py-1">
-            <div className="flex gap-1 md:row-span-2 flex-row md:flex-col">
-              {product.imgList.map((img: string, index: number) => (
-                <div
-                  key={index}
-                  className=" md:w-full my-4 flex-shrink-0 snap-center"
-                  id={`item${index + 1}`}
-                  data-index={index}
-                  onClick={() => {
-                    setImgIndex(index);
-                  }}
+          <div className="flex gap-1 md:row-span-2 flex-row md:flex-col">
+            {product.imgList.map((img: string, index: number) => (
+              <div
+                key={index}
+                className=" md:w-full my-4 flex-shrink-0 snap-center"
+                id={`item${index + 1}`}
+                data-index={index}
+                onClick={() => {
+                  setImgIndex(index);
+                }}
 
-                > 
-                  {index === imgIndex ? (
-                    <img src={img} className="w-16 md:w-24 h-auto border-2 border-black" alt={`product-${index}`} />  
-                  ) : ( 
-                  <img src={img} className= "md:w-24 w-16 h-auto" alt={`product-${index}`} />
-                  )
-                }
-                </div>
-              ))}
+              > 
+                {index === imgIndex ? (
+                  <img src={img} className="w-16 md:w-24 h-auto border-2 border-black" alt={`product-${index}`} />  
+                ) : ( 
+                <img src={img} className= "md:w-24 w-16 h-auto" alt={`product-${index}`} />
+                )
+              }
+              </div>
+            ))}
+          </div>
+          <div className="md:col-span-2">
+            <div className="flex flex-row justify-center items-center w-full">
+                <h2 className="text-xs  text-center text-white bg-black font-bold p-1 w-18">{product.code}</h2>
             </div>
-            <div className="md:col-span-2">
-              <div className="flex flex-row justify-center items-center w-full">
-                  <h2 className="text-xs  text-center text-white bg-black font-bold p-1 w-18">{product.code}</h2>
+            <h1 className=" text-2xl font-thin ">{product.name}</h1>
+            <h1 className=" text-sm font-thin ">{product.nickname}</h1>
+            <div className="flex flex-row gap-2 justify-center">
+              <h2 className="text-sm  ">{product.price.toLocaleString("vi-VN")} đ</h2>
+              <p className="text-sm font-light text-gray-400  line-through">
+                {(product.price * 110 / 100).toLocaleString("vi-VN")} đ
+              </p>
+            </div>
+        
+            <div className=" bg-white  p-4">
+              <p className="text-sm font-light mt-0 mb-2 text-left text-gray-400">Color: </p>
+              <div className="flex flex-row gap-1 items-left bg-white max-w-4xl mx-auto">
+                {colors.map((color) => (
+                  <div
+                    key={color.value}
+                    onClick={() => setSelectedColor(color.value)}
+                    className={`w-14 h-6  cursor-pointer border-2 ${
+                      selectedColor === color.value ? "border-black scale-110" : "border-gray-300"
+                    }`}
+                    style={{ backgroundColor: color.value }}
+                  />
+                ))}
               </div>
-              <h1 className=" text-2xl font-thin ">{product.name}</h1>
-              <h1 className=" text-sm font-thin ">{product.nickname}</h1>
-              <div className="flex flex-row gap-2 justify-center">
-                <h2 className="text-sm  ">{product.price.toLocaleString("vi-VN")} đ</h2>
-                <p className="text-sm font-light text-gray-400  line-through">
-                  {(product.price * 110 / 100).toLocaleString("vi-VN")} đ
-                </p>
+              <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400">Size: </p>
+              <div className="flex flex-row gap-2 items-left bg-white text-black font-thin max-w-4xl mx-auto">
+                {sizesShort.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`text-xs font-thin border px-5 py-1 transition-colors duration-200 ${
+                      selectedSize === size
+                        ? "bg-black text-white border-black"
+                        : "bg-white text-black border"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
               </div>
-          
-              <div className=" bg-white  p-4">
-                <p className="text-sm font-light mt-0 mb-2 text-left text-gray-400">Color: </p>
-                <div className="flex flex-row gap-1 items-left bg-white max-w-4xl mx-auto">
-                  {colors.map((color) => (
-                    <div
-                      key={color.value}
-                      onClick={() => setSelectedColor(color.value)}
-                      className={`w-14 h-6  cursor-pointer border-2 ${
-                        selectedColor === color.value ? "border-black scale-110" : "border-gray-300"
-                      }`}
-                      style={{ backgroundColor: color.value }}
-                    />
-                  ))}
-                </div>
-                <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400">Size: </p>
-                <div className="flex flex-row gap-2 items-left bg-white text-black font-thin max-w-4xl mx-auto">
-                  {sizesShort.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`text-xs font-thin border px-5 py-1 transition-colors duration-200 ${
-                        selectedSize === size
-                          ? "bg-black text-white border-black"
-                          : "bg-white text-black border"
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-                <SizeChart productName={product.name} />
-                <div className="bg-black text-white text-center p-3 text-xs mt-5 cursor-pointer"
-                  onClick={() => {
-                    if (!selectedSize || !selectedColor) {
-                      alert("Please select a size and color before adding to cart.");
-                      return;
-                    }
-                    handleAddToCart(product.id, selectedSize, selectedColor);
-                    setIsCartOpen(true);
-                  }}
-                  > ADD TO CART 
-                </div>
+              <SizeChart productName={product.name} />
+              <div className="bg-black text-white text-center p-3 text-xs mt-5 cursor-pointer"
+                onClick={() => {
+                  if (!selectedSize || !selectedColor) {
+                    alert("Please select a size and color before adding to cart.");
+                    return;
+                  }
+                  handleAddToCart(product.id, selectedSize, selectedColor);
+                  setIsCartOpen(true);
+                }}
+                > ADD TO CART 
               </div>
             </div>
-            
-
-        <div className="col-span-3">
-
-        <JsonDisclosure json={product?.sideInfo} />
-        </div>
-
+          </div>
+          <div className="col-span-3">
+          <JsonDisclosure json={product?.sideInfo} />
+          </div>
         </div>
 
 
         <ProductInfoBox description={product.description}/>
         <ProductIntroBox introduction={product.introduction} />
+        <ReviewComponent/>
         <div className="col-span-2">
           <Footer/>
         </div>
