@@ -1,6 +1,6 @@
 // routes/product.tsx
 
-import { useParams } from "react-router";
+import { NavLink, useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import supabase from "utils/supabase";
 import { type CartItem, type Order, type Product } from "~/library/interface";
@@ -27,6 +27,8 @@ export default function ProductPage() {
         created_at: "",
         user_id: "",
     }); 
+    const sizes= [ "M", "L", "XL", "XXL"]; // Add or modify sizes as needed
+
     const [loadingProfile, setLoadingProfile] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -47,7 +49,6 @@ export default function ProductPage() {
             console.log("Updated cart:", newCart);
         }
     }
-  
 
     const fetchProducts = async () => {
         setLoadingProducts(true);
@@ -72,7 +73,7 @@ export default function ProductPage() {
         console.error("Error fetching orders:", error);
         } else {
             setOrders(data);
-            console.log("orders of user: ", data)
+            console.log("orders of user: ", data);
         }
         setLoading(false);
     };
@@ -124,30 +125,6 @@ export default function ProductPage() {
   };
 
 
-
-//   useEffect(() => {
-//     if (id) {
-//       const fetchProduct = async () => {
-//         const { data, error } = await supabase
-//           .from("Product")
-//           .select("*")
-//           .eq("id", id)
-//           .single();
-
-//         if (error) {
-//           console.error("Failed to fetch product:", error.message);
-//         } else {
-//           setProduct(data);
-//           console.log("Product fetched successfully:", data);
-//         }
-
-//         setLoading(false);
-//       };
-
-//       fetchProduct();
-//     }
-//   }, [id]);
-
   useEffect(() => {
     window.scrollTo({ top: 1, behavior: "smooth" });
   }, [product]);
@@ -159,7 +136,7 @@ export default function ProductPage() {
 
   return (
 
-    <div className="md:pt-24 pt-16 md:grid md:px-4 md:grid-cols-2 md:gap-4 lg:gap-0 xl:gap-12 2xl:gap-16 bg-white min-h-screen">
+    <div className="md:pt-0 pt-16 md:grid md:px-4 md:grid-cols-2 md:gap-4 lg:gap-0 xl:gap-12 2xl:gap-16 bg-white  min-h-screen">
         <HeaderBannerPage isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} isCartOpen={isCartOpen}
     setIsCartOpen={setIsCartOpen} />
         <Authenticate isOpen={authOpen} onClose={() => setAuthOpen(false)} />
@@ -191,46 +168,101 @@ export default function ProductPage() {
         }
 
         {orders?.map((order, index)=> {
-        return <div className=" px-40 mt-9 min-h-screen col-span-2 grid grid-cols-2 justify-center items-center">
-            <div className=" flex flex-row items-end col-span-1 ">
-                <img 
-                    className="w-auto h-96 py-10 object-contain"
-                    src="https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//Order%20Tracking.jpg"
-                />
+        return <div className="mt-1 min-h-screen col-span-2 grid grid-cols-3 justify-center items-center">
+            <div className="grid md:grid-cols-3 items-end justify-end col-span-2">
+              {Object.entries(order.cart).map(([productKey, item]) => {
+                const [productId, size] = productKey.split('_');
+                const product = products.find((p) => p.id.toString() === productId);
+
+                if (!product) return null;
+
+                return (
+                  <div
+                    key={productKey}
+                    className="col-span-1 mt-20 shadow-md justify-between shadow-white flex group flex-col gap-2 bg-white h-[30vh] mb-10 rounded-lg"
+                  >
+                    <NavLink to={`product/${product.id}`} className="no-underline h-full">
+                      <div className="relative flex flex-row gap-1 overflow-hidden h-full w-full">
+                        <img
+                          src={product.img}
+                          alt={product.name}
+                          className="h-full w-full object-contain transition-opacity duration-300 group-hover:opacity-0"
+                        />
+                        <img
+                          src={product.img2}
+                          alt={`${product.name} alternate`}
+                          className="absolute top-0 left-0 h-full w-full object-contain opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                        />
+                      </div>
+                    </NavLink>
+
+                    <div className="flex relative text-gray-700 flex-col">
+                      <div className="text-base font-light text-gray-500 mb-0 text-center rounded-lg uppercase">
+                        {product.code ? `${product.code} ` : ""}{product.name || "Unnamed Product"}
+                      </div>
+
+                      <div className="flex font-light flex-col items-center gap-0">
+                        <p className="text-xs text-gray-400 m-0 p-0 line-through">
+                          {(product.price * 110 / 100).toLocaleString("vi-VN")} Vnđ
+                        </p>
+                        <p className="text-sm text-gray-500 m-0 p-0">
+                          {product.price.toLocaleString("vi-VN")} Vnđ
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-center w-full transition duration-800 ease-in-out flex-row gap-1">
+                        <button
+                          className="text-xs font-thin bg-black text-white border-black border px-3 py-1"
+                        >
+                          {size}
+                        </button>
+                        <button
+                          className="text-xs font-thin bg-black text-white border-black border px-3 py-1"
+                        >
+                          số lượng: {item.quantity}
+                        </button>
+
+                      </div>
+                      <div className="flex flex-row justify-center items-center"> màu: 
+                        {[
+                          { name: "black", value: "#000000" },
+                          { name: "white", value: "#FFFFFF" },        // or "#808080" for standard gray
+                        ].map((color) => (
+                          <div
+                            key={color.value}
+                            className={`w-10 h-3 m-1  cursor-pointer border-2 ${
+                              item.color === color.name ? "border-black scale-110 " : "border-gray-300 hidden"
+                            }`}
+                            style={{ backgroundColor: color.value }}
+                          />
+                        ))}
+
+                      </div>
+                      
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="grid grid-cols-2 mt-20 text-black">
-                {/* <div className="flex flex-col">
-                    <GiPositionMarker />
-                    <p>
-                        {order.address}
-                    </p>
-                </div>
-                <div className="flex flex-col">
-                    <MdOutlinePayment /> 
-                    <p>
-                        {order.payment}
-                    </p>
-                </div>
+
+            <div className="grid grid-cols-2 mt-20 text-black ">
                 
-                <div className="flex flex-col">
-                    <AiOutlineTruck />
-                    <p>
-                        {order.status}
-                    </p>
-                </div>
-                <div className="flex flex-col">
-                    <FaBarcode />
-                    <p>
-                        {order.tracking_order_code}
-                    </p>
-                </div> */}
                 <div className=" text-xs gap-2 font-light flex flex-col">
                     <div className="text-base font-semibold capitalize">{order.full_name}</div>
                     {order.status !== "rejected" && <div className="flex mb-4 flex-row justify-start items-center "> <RiVerifiedBadgeFill color={"green"} /> Verified Shop </div>}
                     <div> <span className="font-semibold"> Trạng thái:</span> {order.status}</div>
                     <div> <span className="font-semibold">  Điạ chi:</span> {order.address}</div>
-                    <div>   <span className="font-semibold"> Thành tiền: </span> {order.cost}</div>
-
+                    <div>   <span className="font-semibold"> Thành tiền: </span> 
+                    {(order.cost).toLocaleString("vi-VN")} Vnđ</div>
+                    <div>   <span className="font-semibold"> Mã giao hàng: </span> 
+                    {order.tracking_order_code}
+                    </div>
+                    <button className="rounded-lg bg-black p-2 text-white font-black cursor-pointer"
+                    // onClick={}
+                    onClick={() => {
+                        window.open(`https://i.ghtk.vn/${order.tracking_order_code}`, '_blank');
+                      }}
+                    > Theo giõi đơn hàng</button>
                 </div>
 
             </div>

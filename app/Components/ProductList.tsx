@@ -15,20 +15,21 @@ const ProductList: React.FC<ProductListProps> = ({ products, cart, onAddToCart, 
   const [selectedSize, setSelectedSize] = useState("");
 
   return (
-    <>
+    <div className="md:col-span-4 px-10 md:grid md:grid-cols-4 gap-4">
+      <div></div>
       {products.map((product) => {
         if (product !== undefined)
           return (
             <div
               key={product.id}
-              className="col-span-1 mt-20 shadow-md justify-between shadow-white flex group flex-col mx-0 bg-white h-[60vh]  mb-10 rounded-lg"
+              className="col-span-1 mt-20 shadow-md justify-between shadow-white flex group flex-col gap-2 bg-white h-[60vh]  mb-10 rounded-lg"
             >
               <NavLink to={`product/${product.id}`} className="no-underline h-full">
-                <div className="relative rounded-lg flex flex-row gap-1 overflow-hidden h-[40vh] w-full ">
+                <div className="relative flex flex-row gap-1 overflow-hidden h-full w-full ">
                   <img
                     src={product.img}
                     alt={product.name}
-                    className="h-full w-full object-cover  transition-opacity duration-300 group-hover:opacity-0"
+                    className="h-full w-full object-contain   transition-opacity duration-300 group-hover:opacity-0"
                   />
                   <img
                     src={product.img2}
@@ -40,7 +41,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, cart, onAddToCart, 
 
               <div className="flex relative text-gray-700 flex-col">
 
-                <div className="text-sm font-light mb-0 text-center rounded-lg capitalize">
+                <div className="text-base font-light text-gray-500 mb-0 text-center rounded-lg uppercase">
                   {product?.code ? `${product.code} ` : ""}{product?.name || "Unnamed Product"}
                 </div>
 
@@ -61,7 +62,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, cart, onAddToCart, 
                         setSelectedSize(size)
                            }
                         }
-                        className={`text-xs font-thin hover:border-black  ease-in-out cursor-pointer border border-gray-200 px-3 py-1 transition-colors duration-200 ${
+                        className={`text-xs font-thin hover:border-black  ease-in-out cursor-pointer border border-gray-400 px-3 py-1 transition-colors duration-200 ${
                             selectedSize === size
                             ? "bg-black text-white border-black"
                             : "bg-white text-black border"
@@ -80,7 +81,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, cart, onAddToCart, 
           );
         return null;
       })}
-    </>
+    </div>
   );
 };
 

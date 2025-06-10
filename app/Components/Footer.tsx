@@ -65,7 +65,7 @@ export default function Footer() {
       <div className="w-full h-0.5 bg-green-900 mt-8" />
 
       <div className="flex flex-wrap items-center mt-4 px-10 text-gray-400 text-sm">
-        <p className="mr-6">@ DeutschTrung, Inc, 2025</p>
+        <p className="mr-6">@Gapz, Inc, 2025</p>
         {footerContent.map((item) => (
           <a
             href={item.href}

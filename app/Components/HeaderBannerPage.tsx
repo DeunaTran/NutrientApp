@@ -172,10 +172,10 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
                         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                           {mobileMenuOpen ? <FaTimes color="gray" size={30} /> : <FaBars color="gray" size={22} />}
                         </button>
-                        {["Cửa hàng", "Bộ sưu tập", "Chất liệu", "Khám phá"].map((label) => (
+                        {["Cửa hàng", "Bộ sưu tập", "Chất liệu", "Theo giõi đơn hàng "].map((label) => (
                           <a
                             key={label}
-                            href="#"
+                            href="order"
                             className=" py-1 px-2 border-b border-gray-300  w-full"
                           >
                             {label}
