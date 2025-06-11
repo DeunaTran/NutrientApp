@@ -15,8 +15,8 @@ const ProductList: React.FC<ProductListProps> = ({ products, cart, onAddToCart, 
   const [selectedSize, setSelectedSize] = useState("");
 
   return (
-    <div className="md:col-span-4 px-10 md:grid md:grid-cols-4 gap-4">
-      <div></div>
+    <div className=" px-10 md:grid md:grid-cols-4 grid-cols-1 col-span-2 gap-4">
+      <div className="hidden md:block"></div>
       {products.map((product) => {
         if (product !== undefined)
           return (

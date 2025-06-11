@@ -18,6 +18,7 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const listLink = ["/", "product/1", "/policy", "/order"];
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -71,14 +72,14 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
         {/* Navigation */}
         <nav className="col-span-3">
           <ul className="grid grid-cols-4 gap-0 ">
-            {["SHOP", "COLLECTION", "FABRIC TECH", "EXPLORE"].map((label) => (
+            {["Cửa hàng", "Sản phẩm", "điều khoản", "Đơn hàng"].map((label, index) => (
               <li
                 key={label}
                 className="hover:border-b-4 font-thin hover:border-gray-300 py-2 transition duration-200 transform hover:scale-105"
               >
                 <a
-                  href="#"
-                  className="block text-center px-2 py-1 rounded-md cursor-pointer text-black font-light"
+                  href={listLink[index]}
+                  className="block text-center uppercase px-2 py-1 rounded-md cursor-pointer text-black font-light"
                 >
                   {label}
                 </a>
@@ -172,10 +173,10 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
                         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                           {mobileMenuOpen ? <FaTimes color="gray" size={30} /> : <FaBars color="gray" size={22} />}
                         </button>
-                        {["Cửa hàng", "Bộ sưu tập", "Chất liệu", "Theo giõi đơn hàng "].map((label) => (
+                        {["Cửa hàng", "Bộ sưu tập", "Điều khoản", "Theo giõi đơn hàng "].map((label, index) => (
                           <a
                             key={label}
-                            href="order"
+                            href={listLink[index]}
                             className=" py-1 px-2 border-b border-gray-300  w-full"
                           >
                             {label}
@@ -261,10 +262,10 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
                 <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                   {mobileMenuOpen ? <FaTimes color="gray" size={30} /> : <FaBars color="gray" size={22} />}
                 </button>
-                {["Cửa hàng", "Bộ sưu tập", "Chất liệu", "Khám phá"].map((label) => (
+                {["Cửa hàng", "Sản phẩm", "điều khoản", "Đơn hàng"].map((label, idx) => (
                   <a
                     key={label}
-                    href="#"
+                    href={listLink[idx]}
                     className=" py-1 px-2 border-b border-gray-300  w-full"
                   >
                     {label}

@@ -6,4 +6,5 @@ export default [
   route("product/:id", "routes/product.tsx"), // 👈 dynamic product route
   route("emailConfirmationWaiting", "routes/emailConfirmationWaiting.tsx"), // 👈 dynamic product route
   route("order", "routes/order.tsx"),
+  route("policy", "routes/policy.tsx"),
 ] satisfies RouteConfig;

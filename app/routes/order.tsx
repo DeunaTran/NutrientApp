@@ -14,6 +14,7 @@ import { MdOutlinePayment } from "react-icons/md";
 import { AiOutlineTruck } from "react-icons/ai";
 import { FaBarcode } from "react-icons/fa";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+import type { User } from "@supabase/supabase-js";
 
 
 
@@ -27,6 +28,7 @@ export default function ProductPage() {
         created_at: "",
         user_id: "",
     }); 
+    const [user, setUser] = useState<User>();
     const sizes= [ "M", "L", "XL", "XXL"]; // Add or modify sizes as needed
 
     const [loadingProfile, setLoadingProfile] = useState(false);
@@ -89,6 +91,7 @@ export default function ProductPage() {
           setIsAuthenticated(true);
           fetchOrder(data.user.id)
           fetchProfile(data.user.id);
+          setUser(data.user)
           console.log("User is logged in:", data.user);
         } else {
           console.log("No user is logged in.");
@@ -124,19 +127,15 @@ export default function ProductPage() {
     setLoadingProfile(false);
   };
 
-
   useEffect(() => {
     window.scrollTo({ top: 1, behavior: "smooth" });
   }, [product]);
-  const [isAdd, setIsAdd] = useState(true);
-
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-
   return (
 
-    <div className="md:pt-0 pt-16 md:grid md:px-4 md:grid-cols-2 md:gap-4 lg:gap-0 xl:gap-12 2xl:gap-16 bg-white  min-h-screen">
+    <div className="md:pt-0 pt-4 md:grid grid-cols-1 md:px-4 md:grid-cols-2 md:gap-4 lg:gap-0 xl:gap-12 2xl:gap-16 bg-white  min-h-screen">
         <HeaderBannerPage isAuth={isAuthenticated} setOpenAuthModal={() => setAuthOpen(true)} setAuth={setIsAuthenticated} profile={profile} setProfile={setProfile} products={products} isCartOpen={isCartOpen}
     setIsCartOpen={setIsCartOpen} />
         <Authenticate isOpen={authOpen} onClose={() => setAuthOpen(false)} />
@@ -167,9 +166,21 @@ export default function ProductPage() {
             </>
         }
 
+          <div className=" md:col-span-2 mt-30 text-black md:px-30 px-4 ">
+                <div className=" text-xs gap-2 font-light flex flex-col ">
+                    <div className="text-base font-semibold capitalize">Theo giõi tiến độ đơn hàng của bạn</div>
+                    <div> <span className="font-semibold"> Khách hàng: </span> {user?.user_metadata.full_name}</div>
+                    <div> <span className="font-semibold">ID: </span> {user?.id}</div>
+                    <div> <span className="font-semibold"> Email: </span> {user?.user_metadata.email}</div>
+                    <div> <span className="font-semibold"> Phone: </span> {user?.user_metadata.email}</div>
+                <div/>
+              </div>
+          </div>
+        
+
         {orders?.map((order, index)=> {
-        return <div className="mt-1 min-h-screen col-span-2 grid grid-cols-3 justify-center items-center">
-            <div className="grid md:grid-cols-3 items-end justify-end col-span-2">
+        return <div className="mt-1  col-span-2 grid grid-cols-1 md:grid-cols-3 justify-center items-center">
+            <div className="grid grid-cols-2 md:grid-cols-3 items-end justify-end col-span-2">
               {Object.entries(order.cart).map(([productKey, item]) => {
                 const [productId, size] = productKey.split('_');
                 const product = products.find((p) => p.id.toString() === productId);
@@ -179,7 +190,7 @@ export default function ProductPage() {
                 return (
                   <div
                     key={productKey}
-                    className="col-span-1 mt-20 shadow-md justify-between shadow-white flex group flex-col gap-2 bg-white h-[30vh] mb-10 rounded-lg"
+                    className="col-span-1 mt-20  shadow-md justify-between shadow-white flex group flex-col gap-2 bg-white  mb-10 rounded-lg"
                   >
                     <NavLink to={`product/${product.id}`} className="no-underline h-full">
                       <div className="relative flex flex-row gap-1 overflow-hidden h-full w-full">
@@ -245,13 +256,14 @@ export default function ProductPage() {
               })}
             </div>
 
-            <div className="grid grid-cols-2 mt-20 text-black ">
+            <div className="grid px-3 grid-cols-1 md:grid-cols-2 mt-20 text-black ">
                 
-                <div className=" text-xs gap-2 font-light flex flex-col">
-                    <div className="text-base font-semibold capitalize">{order.full_name}</div>
+                <div className=" mb-36 text-xs gap-2 font-light flex flex-col">
+                    <div className="text-base font-mono capitalize"> <span className=" text-sm font-semibold">Nguời nhận :</span> {order.full_name}</div>
                     {order.status !== "rejected" && <div className="flex mb-4 flex-row justify-start items-center "> <RiVerifiedBadgeFill color={"green"} /> Verified Shop </div>}
                     <div> <span className="font-semibold"> Trạng thái:</span> {order.status}</div>
                     <div> <span className="font-semibold">  Điạ chi:</span> {order.address}</div>
+                    <div> <span className="font-semibold">  Số điện thoại:</span> {order.phone}</div>
                     <div>   <span className="font-semibold"> Thành tiền: </span> 
                     {(order.cost).toLocaleString("vi-VN")} Vnđ</div>
                     <div>   <span className="font-semibold"> Mã giao hàng: </span> 

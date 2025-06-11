@@ -7,7 +7,7 @@ export const HomeInfoBox = () => {
     return(
         <div className="flex flex-col md:grid md:gap-3 md:mb-30 md:grid-cols-2 md:px-20 items-center text-sm justify-center relative bg-white py-4 ">
 
-            <img src="https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//Gapz%20----Embrace%20Relentles%20---.jpg" 
+            <img src="https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//2PersonThumbnail.jpg" 
             alt="GapZ Logo" className="w-screen md:col-span-1 md:row-span-4 md:w-2xl  h-auto mb-4 hover:opacity-90" />
             {/* <div className="absolute md:grid md:grid-cols-2 w-full top-0 left-0 backdrop-blur-2xl hover:backdrop-blur-none"> */}
                 <div className=" flex flex-col text-gray-800 mb-2 border p-4 border-gray-400 rounded-lg shadow-md">
