@@ -141,10 +141,10 @@ export default function ProductPage() {
               </DisclosureButton>
               <DisclosurePanel className="mt-2  text-left text-base text-black">
                 <p>
-                  1.	Trường hợp bạn muốn đổi mẫu, đổi size vui lòng gửi lại sản phẩm để chúng mình kiểm tra tình trạng hàng. (Thời điểm gửi lại sản phẩm không được quá 2 ngày kể từ khi GAPZ tiếp nhận nhu cầu đổi hàng từ bạn) Sau đó GAPZ sẽ tiến hành gửi sản phẩm mới trong thời gian sớm nhất. Khách hàng sẽ chịu toàn bộ phí ship 2 chiều.
+                  1.	Trường hợp bạn muốn đổi mẫu, đổi size vui lòng gửi lại sản phẩm để chúng mình kiểm tra tình trạng hàng. (Thời điểm gửi lại sản phẩm không được quá 2 ngày kể từ khi GapZ tiếp nhận nhu cầu đổi hàng từ bạn) Sau đó GapZ sẽ tiến hành gửi sản phẩm mới trong thời gian sớm nhất. Khách hàng sẽ chịu toàn bộ phí ship 2 chiều.
                 </p>
                 <p>
-                  2. Trường hợp sản phẩm bị lỗi do nhà sản xuất, hoặc do GAPZ gửi nhầm mẫu, nhầm size, chúng mình sẵn sàng hỗ trợ đổi 2 chiều và chịu toàn bộ phí ship đổi hàng 2 chiều.</p>
+                  2. Trường hợp sản phẩm bị lỗi do nhà sản xuất, hoặc do GapZ gửi nhầm mẫu, nhầm size, chúng mình sẵn sàng hỗ trợ đổi 2 chiều và chịu toàn bộ phí ship đổi hàng 2 chiều.</p>
                 <p>
 
                 3.	Thời gian đổi hàng sẽ giao động từ 1–2 ngày (nội thành TP.HCM) và từ 3–5 ngày (ngoại thành và các tỉnh khác).
@@ -165,16 +165,16 @@ export default function ProductPage() {
               </DisclosureButton>
               <DisclosurePanel className="mt-2  text-left text-base text-black">
                 <p>
-                  1.	Khi nhận được hàng bạn vui lòng kiểm tra kỹ lại sản phẩm, GAPZ sẽ tiếp nhận hỗ trợ đổi size, đổi hàng trong vòng 3 ngày (tính từ ngày bạn nhận được đơn hàng).
+                  1.	Khi nhận được hàng bạn vui lòng kiểm tra kỹ lại sản phẩm, GapZ sẽ tiếp nhận hỗ trợ đổi size, đổi hàng trong vòng 3 ngày (tính từ ngày bạn nhận được đơn hàng).
                 </p>
                 <p>
                   2.	Đối với các sản phẩm đổi, bạn vui lòng không tháo tag, mác. Sản phẩm ở trạng thái mới, chưa qua sử dụng, chưa giặt ủi, không có mùi lạ.
                 </p>
                 <p>
-                  3.	GAPZ chỉ nhận đổi hàng, không nhận trả hàng (trừ trường hợp lỗi do nhà sản xuất).
+                  3.	GapZ chỉ nhận đổi hàng, không nhận trả hàng (trừ trường hợp lỗi do nhà sản xuất).
                 </p>
                 <p>
-                 4.  Khi bạn có nhu cầu đổi vui lòng chọn sản phẩm có giá trị ngang bằng hoặc cao hơn giá trị sản phẩm cũ. GAPZ sẽ hỗ trợ hoàn tiền chênh lệch giữa 2 sản phẩm.
+                 4.  Khi bạn có nhu cầu đổi vui lòng chọn sản phẩm có giá trị ngang bằng hoặc cao hơn giá trị sản phẩm cũ. GapZ sẽ hỗ trợ hoàn tiền chênh lệch giữa 2 sản phẩm.
                 </p>
               </DisclosurePanel>
             </HeadlessDisclosure>
@@ -186,7 +186,7 @@ export default function ProductPage() {
             >
               <DisclosureButton className="group flex lg:px-3 min-w-full  lg:min-w-lg w-full items-center justify-between">
                 <span className="text-base uppercase font-light ">
-                  Lưu ý từ GAPZ
+                  Lưu ý từ GapZ
                 </span>
                 <ChevronDownIcon className="size-5 fill-black/60 group-hover:fill-black/50 group-data-open:rotate-180 group-open:rotate-180 transition-transform duration-500" />
               </DisclosureButton>

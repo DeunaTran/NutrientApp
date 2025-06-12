@@ -153,7 +153,7 @@ export default function Home() {
       <Cookies isOpen={isCookiesOpen} setIsOpen={setIsCookiesOpen} />
       <HomeCarousel />
 
-      <div id="/products" className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 mb-4 px-4">
+      <div id="/products" className="grid grid-cols-2 md:grid-cols-1 gap-4 mt-4 mb-4 px-4">
         <ProductList
         products={products}
         cart={cart}
