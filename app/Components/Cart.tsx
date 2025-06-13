@@ -730,7 +730,7 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                         {/* { totalPurchase - totalDiscount > 0 ? (totalPurchase - totalDiscount).toLocaleString("vi-VN") + " đ" : "0 đ"} */}
                                         </span>
                                     </p>
-                                    <p className='text-xs text-gray-500 font-light'> Nhận ngay Voucher 20%  khi mua đơn đầu tiên</p>
+                                    <p className='text-xs text-gray-500 font-light'> Nhận ngay Voucher khi mua đơn đầu tiên</p>
                                 </div>
                             </div>
                             <div className='flex col-span-2 justify-end items-center text-lg font-semibold text-gray-800'>

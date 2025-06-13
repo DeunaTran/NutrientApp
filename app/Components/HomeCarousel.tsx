@@ -11,7 +11,7 @@ const carouselImagesMobile = [
   "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//Muitrongvinh.png",
   "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//WUYN.png",
   "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//MobileThumbnail2.png",
-  "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//homecarousel3.png",
+  // "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//homecarousel3.png",
 ];
 
 export default function HomeCarousel() {
@@ -70,15 +70,15 @@ export default function HomeCarousel() {
         ))}
       </div>
       
-      <div className=" gap-2 flex flex-col font-light text-sm px-1 text-center rounded-sm py-1  absolute md:bottom-10 bottom-1/4 left-1/2 transform -translate-x-1/2  space-x-2">
-        <p className="text-xs font-thin uppercase">
+      <div className=" gap-2 flex flex-col  text-sm px-1 text-center rounded-sm py-1  absolute md:bottom-10 bottom-1/4 left-1/2 transform -translate-x-1/2  space-x-2">
+        <p className="text-xs text-white font-thin uppercase">
             Ưu đãi độc quyền mới nhất riêng cho bạn!
           </p>
         <button
           onClick={() => {
             window.scrollTo({ top: 700, behavior: "smooth" });
           }}
-         className="bg-white text-black text-xs px-4 py-3  hover:bg-gray-200 transition-colors">
+         className="bg-white rounded-lg text-black text-sm px-4 py-3 font-base  hover:bg-gray-200 transition-colors">
           SHOP NOW
         </button>
       </div>
