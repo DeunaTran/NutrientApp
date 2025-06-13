@@ -71,7 +71,7 @@ export default function HomeCarousel() {
       </div>
       
       <div className=" gap-2 flex flex-col  text-sm px-1 text-center rounded-sm py-1  absolute md:bottom-10 bottom-1/4 left-1/2 transform -translate-x-1/2  space-x-2">
-        <p className="text-xs text-white font-thin uppercase">
+        <p className="text-xs text-white font-black uppercase">
             Ưu đãi độc quyền mới nhất riêng cho bạn!
           </p>
         <button
