@@ -6,9 +6,9 @@ import { MdOutlineFiberSmartRecord } from "react-icons/md";
 export const HomeInfoBox = () => {  
     return(
         <div className="flex flex-col md:grid md:gap-3 md:mb-30 md:grid-cols-2 md:px-20 items-center text-sm justify-center relative bg-white py-4 ">
-                <div className="text-4xl font-black text-white absolute top-30 md:top-70 left-30"> <p className="uppercase">Sản phẩm mới vừa ra</p>
-                 <p className="text-sm"> Rất nhiều thứ mới chờ bạn </p>
-                 <button  className=" cursor-pointer text-sm bg-white text-black px-3 py-2 rounded-lg"
+                <div className="md:text-4xl text-2xl font-black text-white absolute top-30 md:top-70 left-4 md:left-30"> <p className="uppercase">Sản phẩm mới vừa ra</p>
+                 <p className="md:text-sm text-xs"> Rất nhiều thứ mới chờ bạn </p>
+                 <button  className=" cursor-pointer md:text-sm text-xs bg-white text-black px-3 py-2 rounded-lg"
                  onClick={() => {
                     window.scrollTo({ top: 700, behavior: "smooth" });
                 }}
