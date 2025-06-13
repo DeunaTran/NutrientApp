@@ -9,7 +9,8 @@ const carouselImages = [
 const carouselImagesMobile = [
   "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//MobileThumbnail1.png",
   "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//MobileThumbnail2.png",
-  "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//homecarousel3.png"
+  "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//homecarousel3.png",
+  "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//thumbnailMobile4.jpg"
 ];
 
 export default function HomeCarousel() {

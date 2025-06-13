@@ -6,10 +6,13 @@ import { MdOutlineFiberSmartRecord } from "react-icons/md";
 export const HomeInfoBox = () => {  
     return(
         <div className="flex flex-col md:grid md:gap-3 md:mb-30 md:grid-cols-2 md:px-20 items-center text-sm justify-center relative bg-white py-4 ">
-
-            <img src="https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//2PersonThumbnail.jpg" 
-            alt="GapZ Logo" className="w-screen md:col-span-1 md:row-span-4 md:w-2xl  h-auto mb-4 hover:opacity-90" />
-            {/* <div className="absolute md:grid md:grid-cols-2 w-full top-0 left-0 backdrop-blur-2xl hover:backdrop-blur-none"> */}
+                <div className="text-4xl font-black text-white absolute top-50 md:top-70 left-30"> <p className="uppercase">Sản phẩm mới vừa ra</p>
+                 <p className="text-sm"> Rất nhiều thứ mới chờ bạn </p>
+                 <button  className=" cursor-pointer text-sm bg-white text-black px-3 py-2 rounded-lg"> Thử ngay</button>
+                </div>
+                <img src= "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//4f3832cc1640a21efb51.jpg" //"https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//2PersonThumbnail.jpg" 
+                alt="GapZ Logo" className="w-screen md:col-span-1 md:row-span-4 md:w-2xl  h-auto mb-4  " />
+                {/* <div className="absolute md:grid md:grid-cols-2 w-full top-0 left-0 backdrop-blur-2xl hover:backdrop-blur-none"> */}
                 <div className=" flex flex-col text-gray-800 mb-2 border p-4 border-gray-400 rounded-lg shadow-md">
                     <div className="flex flex-row items-start justify-center gap-2">
                         <SiMaterialformkdocs className="text-4xl mb-2 " size={20} />
