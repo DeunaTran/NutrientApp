@@ -12,15 +12,15 @@ const content: Record<string, FooterItem[]> = {
     { name: "Partnerships", href: "https://www.instagram.com/gapz.gz/" },
   ],
   Community: [
-    { name: "Team plans", href: "https://www.instagram.com/gapz.gz/" },
+    { name: "Voucher", href: "https://www.instagram.com/gapz.gz/" },
     { name: "Share", href: "https://www.instagram.com/gapz.gz/" },
   ],
-  Teaching: [
+  Branding: [
     { name: "Become a Sponsor", href: "https://www.instagram.com/gapz.gz/" },
     { name: "User Help Center", href: "https://www.instagram.com/gapz.gz/" },
     { name: "Rules & Requirements", href: "https://www.instagram.com/gapz.gz/" },
   ],
-  Test: [
+  Return: [
     { name: "Help Center", href: "https://www.instagram.com/gapz.gz/" },
     { name: "Clothes Service", href: "https://www.instagram.com/gapz.gz/" },
     // { name: "Exercise", href: "https://www.nzec.edu.vn/#/workspace/dashboard/" },
@@ -29,13 +29,13 @@ const content: Record<string, FooterItem[]> = {
   ],
 };
 
-const keys = ["Company", "Community", "Teaching", "Test"];
+const keys = ["Company", "Community", "Branding", "Return"];
 
 const footerContent: FooterItem[] = [
-  { name: "Help", href: "https://www.facebook.com/anhngunewzealand" },
-  { name: "Privacy", href: "https://www.facebook.com/anhngunewzealand" },
-  { name: "Terms", href: "https://www.facebook.com/anhngunewzealand" },
-  { name: "Your Privacy", href: "https://www.facebook.com/anhngunewzealand" },
+  { name: "Help", href: "https://www.instagram.com/gapz.gz/" },
+  { name: "Privacy", href: "https://www.instagram.com/gapz.gz/" },
+  { name: "Terms", href: "https://www.instagram.com/gapz.gz/" },
+  { name: "Your Privacy", href: "gapz.pro.vn/policy" },
 ];
 
 export default function Footer() {

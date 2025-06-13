@@ -127,7 +127,7 @@ export default function ProductPage() {
         <Authenticate isOpen={authOpen} onClose={() => setAuthOpen(false)} />
 
       <div className="text-black font-extralight text-sm  w-full px-4 pt-2">
-        <div className=" w-full px-28 divide-y rounded-xl  bg-white/10">
+        <div className=" w-full md:px-28 divide-y rounded-xl  bg-white/10">
             <HeadlessDisclosure
               as="div"
               className="w-full col-span-full p-6"
@@ -192,7 +192,7 @@ export default function ProductPage() {
               </DisclosureButton>
               <DisclosurePanel className="mt-2  text-left text-base text-black">
                 <p>
-                  GAPZ xin phép không chịu trách nhiệm với trường hợp nhân viên tư vấn sai, việc tư vấn chỉ mang tính chất tham khảo, không thể chính xác tuyệt đối vì còn phụ thuộc vào sở thích, thói quen của mỗi cá nhân.
+                  GapZ xin phép không chịu trách nhiệm với trường hợp nhân viên tư vấn sai, việc tư vấn chỉ mang tính chất tham khảo, không thể chính xác tuyệt đối vì còn phụ thuộc vào sở thích, thói quen của mỗi cá nhân.
                   Vậy nên bạn vui lòng tham khảo thêm số đo sản phẩm để chọn được size phù hợp và đồng ý nhất nhé!!!
                 </p>
               </DisclosurePanel>
