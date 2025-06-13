@@ -3,7 +3,7 @@
 import { useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import supabase from "utils/supabase";
-import { type CartItem, type Product } from "~/library/interface";
+import { type CartItem, type Product, type Stock } from "~/library/interface";
 import HeaderBanner from "~/Components/HeaderBanner";
 import { type UserProfile } from "~/library/interface";
 import JsonDisclosure from "~/Components/JsonDisclosure";
@@ -16,7 +16,6 @@ import { ProductIntroBox } from "~/Components/ProductIntroBox";
 import Authenticate from "~/Components/Authenticate";
 import SizeChart from "~/Components/SizeChart";
 import { ReviewComponent } from "~/Components/Review";
-
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -33,6 +32,7 @@ export default function ProductPage() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
+  const [stock, setStock] = useState<Record<string, number>>()
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   function updateProfile(newCart: Record<string, CartItem>){
@@ -82,16 +82,6 @@ export default function ProductPage() {
       }
     };
     console.log("Product added to cart: ____ ", cartKey);
-
-    // const { error } = await supabase
-    //   .from("Profile")
-    //   .update({ cart: updatedCart })
-    //   .eq("user_id", profile.user_id);
-
-    // if (error) {
-    //   console.error("Error updating cart:", error.message);
-    //   return;
-    // }
 
     setProfile({ ...profile, cart: updatedCart });
     updateProfile(updatedCart)
@@ -166,7 +156,7 @@ export default function ProductPage() {
     setLoadingProfile(false);
   };
 
-
+  
 
   useEffect(() => {
     if (id) {
@@ -184,10 +174,30 @@ export default function ProductPage() {
           console.log("Product fetched successfully:", data);
         }
 
-        setLoading(false);
       };
 
+      const fetchStock = async () => {
+        const { data, error } = await supabase
+          .from("Stock")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (error) {
+          console.error("Failed to fetch stock:", error.message);
+        } else {
+          setStock({
+            "L" : data.L,
+            "M": data.M,
+            "XL": data.XL,
+            "XXL": data.XXL,
+          })
+          console.log("Stock fetched successfully:", data);
+        }
+        setLoading(false);
+      };
       fetchProduct();
+      fetchStock();
     }
   }, [id]);
 
@@ -277,17 +287,28 @@ export default function ProductPage() {
               <p className="text-sm font-light mt-4 mb-2 text-left text-gray-400">Size: </p>
               <div className="flex flex-row gap-2 items-left bg-white text-black font-thin max-w-4xl mx-auto">
                 {sizesShort.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`text-xs font-thin border px-5 py-1 transition-colors duration-200 ${
-                      selectedSize === size
-                        ? "bg-black text-white border-black"
-                        : "bg-white text-black border"
-                    }`}
-                  >
-                    {size}
-                  </button>
+                  <div className = "group flex flex-col gap-2">
+                    <button
+                      key={size}
+                      onClick={() => {
+                        if(stock && stock[size]> 0){
+                          setSelectedSize(size)
+                        }
+                      }}
+                      className={`text-xs font-thin border px-5 py-1 transition-colors duration-200 
+                        ${selectedSize === size
+                          ? "bg-black text-white border-black"
+                          : "bg-white text-black border"}
+                        ${ stock && stock[size] > 0 
+                          ? ""
+                          : " text-gray-400 " }`
+                        }
+                    >
+                      {size} 
+                    </button>
+                    <p className= {` text-sm group-hover:opacity-100  text-black max-w-20 ${selectedSize === size ? "opacity-100" : "opacity-0"} `}  > Còn { stock ?  stock[size]: ""} sản phẩm  </p>
+                  </div>
+
                 ))}
               </div>
               <SizeChart productName={product.name} />

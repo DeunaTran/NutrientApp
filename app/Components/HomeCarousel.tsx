@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 
 const carouselImages = [
-  "https://i.ibb.co/q4tz5C0/Untitled-design.png",
+  // "https://i.ibb.co/q4tz5C0/Untitled-design.png",
+  "https://kmaxqaqeyvcvuizuagqi.supabase.co/storage/v1/object/public/videos//test2.png",
   "https://i.ibb.co/233WdTrh/Gapz-Empowering-Greatness-1.png",
 ];
 
 const carouselImagesMobile = [
   "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//MobileThumbnail1.png",
   "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//MobileThumbnail2.png",
+  "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//homecarousel3.png"
 ];
 
 export default function HomeCarousel() {
@@ -50,16 +52,16 @@ export default function HomeCarousel() {
   }, [currentIndex, images.length]);
 
   return (
-    <div className="relative overflow-hidden w-full bg-white md:p-4">
+    <div className="relative md:mt-20 overflow-hidden w-full  bg-white md:p-4">
       <div
-        className="flex transition-transform duration-700 ease-in-out"
+        className="flex md:max-h-2xl   transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {images.map((src, idx) => (
           <div className="min-w-full flex-shrink-0" key={idx}>
             <img
               src={src}
-              className="w-screen h-auto object-cover "
+              className="w-screen h-auto md:max-h-[80vh] object-cover "
               alt={`carousel-${idx}`}
             />
           </div>

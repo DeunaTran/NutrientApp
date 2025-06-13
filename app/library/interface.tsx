@@ -28,6 +28,12 @@ export interface Order {
   tracking_order_code: string;
 }
 
+export interface Stock {
+  M : number;
+  L : number;
+  Xl : number;
+  XXL: number;
+}
 
 export interface Review {
   id: number;
