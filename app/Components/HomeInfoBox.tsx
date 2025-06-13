@@ -6,9 +6,13 @@ import { MdOutlineFiberSmartRecord } from "react-icons/md";
 export const HomeInfoBox = () => {  
     return(
         <div className="flex flex-col md:grid md:gap-3 md:mb-30 md:grid-cols-2 md:px-20 items-center text-sm justify-center relative bg-white py-4 ">
-                <div className="text-4xl font-black text-white absolute top-40 md:top-70 left-30"> <p className="uppercase">Sản phẩm mới vừa ra</p>
+                <div className="text-4xl font-black text-white absolute top-30 md:top-70 left-30"> <p className="uppercase">Sản phẩm mới vừa ra</p>
                  <p className="text-sm"> Rất nhiều thứ mới chờ bạn </p>
-                 <button  className=" cursor-pointer text-sm bg-white text-black px-3 py-2 rounded-lg"> Thử ngay</button>
+                 <button  className=" cursor-pointer text-sm bg-white text-black px-3 py-2 rounded-lg"
+                 onClick={() => {
+                    window.scrollTo({ top: 700, behavior: "smooth" });
+                }}
+                    > Thử ngay</button>
                 </div>
                 <img src= "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//4f3832cc1640a21efb51.jpg" //"https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//2PersonThumbnail.jpg" 
                 alt="GapZ Logo" className="w-screen md:col-span-1 md:row-span-4 md:w-2xl  h-auto mb-4  " />
