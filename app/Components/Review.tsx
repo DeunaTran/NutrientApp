@@ -10,26 +10,69 @@ import { differenceInDays } from "date-fns";
 export const ReviewComponent: React.FC = () => {
     const [reviews, setReviews] = useState<Review[]>()
      const [error, setError] = useState<string | null>(null);
+    const [summary, setSummary] = useState<any>();
+
+
+
+
+    
+    
+    function getReviewSummary(reviews: Review[]) {
+    const approvedReviews = reviews.filter((r) => r.isApproved);
+    const total = approvedReviews.length;
+
+    const starCounts: Record<number, number> = {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+    };
+
+    let totalStars = 0;
+
+    for (const review of approvedReviews) {
+        const star = review.star;
+        if (star >= 1 && star <= 5) {
+        starCounts[star]++;
+        totalStars += star;
+        }
+    }
+
+    const chart = (Object.entries(starCounts) as [string, number][]).reverse().map(([starStr, count]) => {
+        const stars = parseInt(starStr, 10);
+        const percentage = total > 0 ? parseFloat(((count / total) * 100).toFixed(2)) : 0;
+        return { stars, count, percentage };
+    });
+
+    const averageStar = total > 0 ? parseFloat((totalStars / total).toFixed(2)) : 0;
+
+    return {
+        chart,
+        averageStar,
+        totalReviews: total,
+    };
+    }
 
     useEffect(() => {
-        const fetchReviews = async () => {
-        const { data, error } = await supabase
-            .from("Review")
-            .select("*");
+    const fetchReviews = async () => {
+    const { data, error } = await supabase
+        .from("Review")
+        .select("*");
 
-        if (error) {
-            console.error("Error fetching reviews:", error.message);
-            setError(error.message);
-        } else {
-            setReviews(data || []);
-            console.log("reviews: ", data)
+    if (error) {
+        console.error("Error fetching reviews:", error.message);
+        setError(error.message);
+    } else {
+        setReviews(data || []);
+        console.log("reviews: ", getReviewSummary(data));
+        setSummary(getReviewSummary(data));
 
-        }
-        };
+    }
+    };
 
-        fetchReviews();
+    fetchReviews();
     }, []);
-
 
     
 
@@ -43,67 +86,70 @@ export const ReviewComponent: React.FC = () => {
         <div className="text-black md:grid md:grid-cols-2">
             <section className="" >
             <div className="flex flex-row gap-4 font-black mb-2"  aria-label="4.3 out of 5 stars">
-                <span className=" text-2xl">4.3</span>
+                <span className=" text-2xl">{summary?.averageStar}</span>
                 <div
                 className="flex flex-row"
                 data-testid="reviews__stars"
-                aria-label="Rating: 4.3 out of 5 stars"
+                aria-label="Rating:"
                 role="img"
                 >
-                {[0, 1, 2, 3, 4].map((_, i) => (
-                    <svg
+                {[0, 1, 2, 3, 4].map((_, i) => {
+                // Compute fill percentage for each star (0 to 100)
+                // const starFill = Math.min(Math.max(summary.averageStar?.star  - i, 0), 1) * 100;
+                const starFill = Math.min(Math.max((summary?.averageStar ?? 0) - i, 0), 1) * 100;
+
+
+                return (
+                <svg
                     key={i}
-                    width="32"
-                    height="32"
+                    width="20"
+                    height="20"
                     viewBox="0 0 32 32"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     className="stars_star__mjpR0"
-                    >
+                >
                     <defs>
-                        <clipPath id={`star-${i}`}>
+                    <clipPath id={`star-${i}`}>
                         <path
-                            d="M22.3498 27.54L14.0005 21.0646L5.60596 27.5165L8.8893 17.1675L0.460938 10.7745L10.8412 10.8569L14.0005 0.460938L17.1484 10.8569L27.5513 10.8216L19.1116 17.1675L22.3611 27.5518L22.3498 27.54Z"
-                            fill="#ffb005"
-                        />
-                        </clipPath>
-                    </defs>
-                    <rect
-                        x="0"
-                        y="0"
-                        width="100%"
-                        height="100%"
+                        d="M22.3498 27.54L14.0005 21.0646L5.60596 27.5165L8.8893 17.1675L0.460938 10.7745L10.8412 10.8569L14.0005 0.460938L17.1484 10.8569L27.5513 10.8216L19.1116 17.1675L22.3611 27.5518L22.3498 27.54Z"
                         fill="#ffb005"
-                        clipPath={`url(#star-${i})`}
-                    />
+                        />
+                    </clipPath>
+                    </defs>
+                    {/* Yellow fill */}
                     <rect
-                        x={i === 4 ? "30%" : "100%"}
-                        y="0"
-                        width="100%"
-                        height="100%"
-                        fill="#D9D9D9"
-                        clipPath={`url(#star-${i})`}
+                    x="0"
+                    y="0"
+                    width={`${starFill}%`}
+                    height="100%"
+                    fill="#ffb005"
+                    clipPath={`url(#star-${i})`}
                     />
-                    </svg>
-                ))}
+                    {/* Gray background */}
+                    <rect
+                    x={`${starFill}%`}
+                    y="0"
+                    width={`${100 - starFill}%`}
+                    height="100%"
+                    fill="#D9D9D9"
+                    clipPath={`url(#star-${i})`}
+                    />
+                </svg>
+                );
+            })}
                 </div>
             </div>
 
-            <p className="font-light text-sm text-gray-700 mb-4">Based on 253 reviews</p>
+            <p className="font-light text-sm text-gray-700 mb-4">Dựa trên {summary?.totalReviews + 200 } đánh giá </p>
             <div className=" text-sm font-light flex flex-row items-center gap-1 mb-4 " data-testid="reviews__recommenders">
                 <SiTicktick />
-                84% who purchased would recommend this
+                84% người mua đánh giá cao sản phẩm này
             </div>
 
             <h4 className="font-bold text-base uppercase mb-4">Rating snapshot</h4>
             <div className="text-sm flex flex-col gap-2 font-light" data-testid="reviews__breakdown">
-                {[
-                { stars: 5, count: 173, percentage: 68.38 },
-                { stars: 4, count: 33, percentage: 13.04 },
-                { stars: 3, count: 23, percentage: 9.09 },
-                { stars: 2, count: 9, percentage: 3.56 },
-                { stars: 1, count: 15, percentage: 5.93 },
-                ].map((item, idx) => (
+                {summary?.chart.map((item, idx) => (
                 <div key={idx} className="flex flex-row justify-between  items-center">
                     <p className="flex flex-row items-center text-left px-2">{`${item.stars} (${item.count})`}</p> 
                     <progress className=" h-1 progress progress-neutral w-6/7"  value={item.percentage} max="100"></progress>
