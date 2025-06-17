@@ -123,7 +123,7 @@ export function Cart({isCartOpen, setIsCartOpen, setProfile, isAuth, setOpenAuth
     const [finalCost, setFinalCost] = useState(0);
 
     useEffect(()=>{
-        setFinalCost(((isAuth || isVoucher !== "") ? totalPurchase*9/10 : totalPurchase) + (isFreeShip ? 0 : 30000) )
+        setFinalCost((( isVoucher !== "") ? totalPurchase*9/10 : totalPurchase) + (isFreeShip ? 0 : 30000) )
     }, [isAuth, isVoucher, totalPurchase, isFreeShip]);
 
     function updateProfile(newCart: Record<string, CartItem>){
@@ -476,8 +476,8 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                     <div
                                     key={index}
                                     className={clsx(
-                                        "flex w-[360px] cursor-pointer  hover:bg-gray-200 duration-300  min-w-[300px] flex-row rounded-lg px-4 shadow-md",
-                                        (isFreeShip )  ? "bg-gray-200" : "bg-gray-50 backdrop-blur-2xl"
+                                        "flex w-[360px] relative cursor-pointer  hover:bg-gray-200 duration-300  min-w-[300px] flex-row rounded-lg px-4 shadow-md",
+                                        (isFreeShip)  ? "bg-gray-200" : "bg-gray-50 backdrop-blur-2xl"
                                     )}
                                     onClick={()=>{
                                         if(!isAuth){
@@ -492,6 +492,7 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                             <span className="text-xs text-gray-700">{voucher.description}</span>
                                             <span className="text-xs font-light text-gray-700">{voucher.expiry}</span>
                                         </div>
+                                        <div className={clsx("absolute right-2 top-2 rounded-full p-2 ", (isFreeShip) ? "bg-yellow-300": "bg-gray-400")}></div>
                                     </div>
                                 ))}
                             </div>
@@ -558,7 +559,7 @@ const updateProductColor = (cartKey : string, quantity: number, newColor: string
                                 <div className="flex flex-row justify-between items-center w-full px-2 py-2">
                                     <span className=" ">Giảm giá</span>
                                     <span className="">
-                                        -{ ((isAuth || isVoucher !== "") ? totalPurchase*1/10 : 0).toLocaleString("vi-VN") + " đ"  }
+                                        -{ (( isVoucher !== "") ? totalPurchase*1/10 : 0).toLocaleString("vi-VN") + " đ"  }
                                     </span>
                                 </div>
                                 <div className="flex flex-row justify-between items-center w-full px-2 py-2">

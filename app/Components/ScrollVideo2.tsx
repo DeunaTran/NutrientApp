@@ -65,7 +65,7 @@ const ScrollVideo2: React.FC = () => {
       {videoUrl && (
         <video
           ref={videoRef}
-          src= "https://kmaxqaqeyvcvuizuagqi.supabase.co/storage/v1/object/public/videos//GAPZ-1H-0418.mp4" //{videoUrl}
+          src= "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//GAPZ-2-0418.mp4" //{videoUrl}
           autoPlay
           muted
           playsInline

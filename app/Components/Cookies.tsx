@@ -1,13 +1,26 @@
-import type { FC } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-type CookiesProps = {
-  isOpen: boolean
-  setIsOpen: (open: boolean) => void
-}
+const COOKIE_KEY = 'cookie_consent';
 
-const Cookies: FC<CookiesProps> = ({ isOpen, setIsOpen }) => {
-  const close = () => setIsOpen(false)
+const Cookies: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Check if user already gave consent
+  useEffect(() => {
+    const hasConsent = document.cookie.includes(`${COOKIE_KEY}=true`);
+    if (!hasConsent) {
+      setIsOpen(true);
+    }
+  }, []);
+
+  const giveConsent = () => {
+    // Set cookie for 1 year
+    document.cookie = `${COOKIE_KEY}=true; path=/; max-age=31536000`;
+    setIsOpen(false);
+  };
+
+  const close = () => setIsOpen(false);
 
   return (
     <AnimatePresence>
@@ -27,7 +40,7 @@ const Cookies: FC<CookiesProps> = ({ isOpen, setIsOpen }) => {
             <p className='underline cursor-pointer'>Privacy Policy</p>
 
             <button
-              onClick={close}
+              onClick={giveConsent}
               className='bg-black w-full text-white px-4 py-2 font-semibold mt-2 transition-colors'
             >
               ACCEPT
@@ -50,7 +63,7 @@ const Cookies: FC<CookiesProps> = ({ isOpen, setIsOpen }) => {
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default Cookies
+export default Cookies;
