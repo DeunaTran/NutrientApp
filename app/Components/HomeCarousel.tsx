@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const carouselImages = [
-  "https://kmaxqaqeyvcvuizuagqi.supabase.co/storage/v1/object/public/videos//test2.png",
+  "https://vsdogtolrbybxlubpabb.supabase.co/storage/v1/object/public/media//fullFrontPage1.png",
   "https://i.ibb.co/233WdTrh/Gapz-Empowering-Greatness-1.png",
 ];
 
