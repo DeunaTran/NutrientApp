@@ -11,16 +11,24 @@ export interface Nutrient {
   moisture: number;
   altitude?: number; // optional if not always present
 }
-export type GridResult = {
-  matrix: string[][];
-  numRows: number;
-  numCols: number;
-  north: number;
-  south: number;
-  west: number;
-  east: number;
-};
-export interface NutrientGuide {
+
+
+export interface UserProfile { // the table is "profile"
+  created_at: string;
+  user_id: string;
+  land_ids: number[];
+}
+
+export interface Land { // "land"
+  id: string;
+  created_at: string;
+  name: string;
+  area: number;
+  polygon: PolygonData[];
+  crop: string;
+}
+
+export interface NutrientGuide { // "guide"
   crop: string;
   minNitrogen: number;
   maxNitrogen: number;
@@ -31,6 +39,25 @@ export interface NutrientGuide {
   note?: string; // Optional
 }
 
+
+export type session = { // session
+  session_id: string;
+  land_id: string | null;
+}
+
+
+
+export type GridResult = {
+  matrix: string[][];
+  numRows: number;
+  numCols: number;
+  north: number;
+  south: number;
+  west: number;
+  east: number;
+};
+
+
 export interface Stock {
   M : number;
   L : number;
@@ -38,13 +65,6 @@ export interface Stock {
   XXL: number;
 }
 
-
-
-export interface UserProfile {
-  created_at: string;
-  user_id: string;
-  land_ids: number[];
-}
 
 export interface SupabaseUserLite {
   id: string;
@@ -63,14 +83,6 @@ export interface PolygonData {
 
 export type LatLng = [number, number];
 
-export interface Land {
-  id: string;
-  created_at: string;
-  name: string;
-  area: number;
-  polygon: PolygonData[];
-  crop: string;
-}
 
 export  type NPKMmatrix = {
   nitrogen: number;
@@ -86,11 +98,6 @@ export interface AuthenticateProps {
   setOpenAuthModal: () => void;
 }
 
-
-export type session = {
-  session_id: string;
-  land_id: string | null;
-}
 
  export type Location = {
   formatted: string;

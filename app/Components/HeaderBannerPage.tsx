@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
-import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
+import {  FaBars, FaTimes } from "react-icons/fa";
 import { MdManageAccounts } from "react-icons/md";
-import { IoIosHeart } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
-import supabase from "utils/supabase";
-import SignOut from "./SignOut";
 import { IoCartOutline } from "react-icons/io5";
 import {  type AuthenticateProps} from "~/library/interface";
 import { Link } from "react-router";
-import { Cart } from "./Cart";
 import { motion, AnimatePresence } from "framer-motion";
 
 

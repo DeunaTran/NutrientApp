@@ -4,7 +4,7 @@ import { MdOutlineAccountCircle } from 'react-icons/md';
 import { useUserStore } from '~/stores/useUserStore';
 import { useLandStore } from '~/stores/useLandStore';
 import supabase from 'utils/supabase';
-import AreaMap from '~/components/AreaMap';
+import AreaMap from './AreaMap';
 
 import type { LatLng } from '~/library/interface';
 import type { GridResult, Nutrient, NutrientGuide, session } from '~/library/interface';
