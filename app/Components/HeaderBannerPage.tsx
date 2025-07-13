@@ -6,36 +6,19 @@ import { CiSearch } from "react-icons/ci";
 import supabase from "utils/supabase";
 import SignOut from "./SignOut";
 import { IoCartOutline } from "react-icons/io5";
-import {  type AuthenticateProps, type Product } from "~/library/interface";
+import {  type AuthenticateProps} from "~/library/interface";
 import { Link } from "react-router";
 import { Cart } from "./Cart";
 import { motion, AnimatePresence } from "framer-motion";
 
 
 
-const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, products, isCartOpen, setIsCartOpen }: AuthenticateProps) => {
+const HeaderBannerPage = ({ setOpenAuthModal }: AuthenticateProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const listLink = ["/", "product/1", "/policy", "/order"];
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) {
-        setUser(data.user);
-        console.log("User:", data.user);
-        console.log("Profile in header space:", profile);
-      }
-      else {
-        console.log("No user is in header space.");
-      }
-    });
-    setMobileMenuOpen(false);
-    // setIsCartOpen(false);
-    setSearchOpen(false);
-  }, [isAuth]);
-
+  const listLink = ["/", "/tracuu", "/sanpham", "/nghiencuu", "/linkkien"];
 
 
   useEffect(() => {
@@ -59,20 +42,20 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
       {/* Top Bar - Desktop Only */}
       <div className="hidden md:flex text-sm bg-gray-100 justify-end text-gray-700 px-6">
         <div className="border border-gray-200 p-1 flex items-center gap-1">
-          <MdManageAccounts /> Account
+          <MdManageAccounts /> Tài khoản
         </div>
         <div className="border border-gray-200 p-1">Blog</div>
-        <div className="border border-gray-200 p-1">Help</div>
-        <div className="border border-gray-200 p-1">Email sign up</div>
-        <div className="border border-gray-200 p-1">Language</div>
+        <div className="border border-gray-200 p-1">Trợ Giúp</div>
+        <div className="border border-gray-200 p-1">Email</div>
+        <div className="border border-gray-200 p-1">Ngôn ngữ</div>
       </div>
 
       {/* Desktop Main Header */}
-      <div className="hidden md:grid max-w-7xl text-sm py-1 mx-auto px-4 grid-cols-8 items-center gap-4">
+      <div className="hidden md:grid max-w-8xl text-sm py-1 mx-auto px-4 grid-cols-8 items-center gap-4">
         {/* Navigation */}
-        <nav className="col-span-3">
-          <ul className="grid grid-cols-4 gap-0 ">
-            {["Cửa hàng", "Sản phẩm", "điều khoản", "Đơn hàng"].map((label, index) => (
+        <nav className="col-span-4">
+          <ul className="grid grid-cols-5 gap-0 ">
+            {["Trang Chủ","Tra Cứu Đất ", "Sản phẩm", "Nghiên Cứu", "Linh Kiện"].map((label, index) => (
               <li
                 key={label}
                 className="hover:border-b-4 font-thin hover:border-gray-300 py-2 transition duration-200 transform hover:scale-105"
@@ -89,23 +72,7 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
         </nav>
 
         {/* Logo */}
-        <div className="col-span-2 items-center flex justify-center mb-2">
-          {/* <img
-            src={
-               "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
-            }
-            alt="MyLogo"
-            className="h-12 w-auto rounded-lg"
-          /> */}
-          <Link to="/" className="flex items-center">
-            <img
-              src={
-                "https://i.ibb.co/zg5RPFD/Logo-Th-ng-4.png" // Logo when scrolled
-              }
-              alt="MyLogo"
-              className="h-8 w-auto"
-            />
-          </Link>
+        <div className="col-span-1 items-center flex justify-center mb-2">
         </div>
 
 
@@ -146,7 +113,7 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
 
         {/* Icons - Computer */}
         <div className="col-span-1 hidden md:flex justify-start items-center space-x-4">
-          <button onClick={() => { console.log(">>>"); setIsCartOpen(!isCartOpen) }}>
+          <button onClick={() => { }}>
               <IoCartOutline color="gray" size={22} />
             </button>
             
@@ -154,10 +121,7 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
                <FaBars color="gray" size={22} />
             </button>
         </div>
-        {/* Mobile Cart Bar */}
-        {isCartOpen && 
-          <Cart isAuth={isAuth} setOpenAuthModal={setOpenAuthModal} products={products} isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} profile={profile} setProfile={setProfile} />
-        }  
+      
         {mobileMenuOpen && (
                   <AnimatePresence>
                   <motion.div
@@ -181,35 +145,7 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
                           >
                             {label}
                           </a>
-                        ))}
-                        {!isAuth && 
-                        <button
-                          className="py-1 px-2 border rounded-sm w-full text-center"
-                          onClick={setOpenAuthModal} >
-                          Đăng nhập tài khoản
-                        </button>
-                        }
-                        {isAuth && 
-                        <div className="flex flex-col items-start space-y-2">
-                        <div className=" mt-4 "> Tài Khoản của bạn </div>
-                        <div className="  font-serif" >Chào mừng trở lại, {user?.user_metadata.full_name} </div>
-                        <div className=" text-sm"> 
-                          <div className=" "> Số điện thọai: {user?.user_metadata.phone} </div>
-                          <div className=" "> Email: {user?.user_metadata.email} </div>
-                        </div>
-        
-                        
-                        <SignOut onSignOut={() => {
-                          setUser(null);
-                          setAuth?.(false); // Update parent/global state if needed
-                          setMobileMenuOpen(false);
-                          console.log("User signed out");
-                        }} />
-                        </div>
-                        
-                        }
-                        
-        
+                        ))}  
                       </nav>
                     </motion.div>
                   </AnimatePresence>
@@ -236,7 +172,7 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
               {searchOpen ? <FaTimes color="gray" size={22} /> : <CiSearch color="gray" size={22} />}
             </button>
 
-            <button onClick={() => { setIsCartOpen(!isCartOpen) }}>
+            <button onClick={() => { }}>
               <IoCartOutline color="gray" size={22} />
             </button>
             
@@ -271,43 +207,14 @@ const HeaderBannerPage = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profi
                     {label}
                   </a>
                 ))}
-                {!isAuth && 
-                <button
-                  className="py-1 px-2 border rounded-sm w-full text-center"
-                  onClick={setOpenAuthModal} >
-                  Đăng nhập tài khoản
-                </button>
-                }
-                {isAuth && 
-                <div className="flex flex-col items-start space-y-2">
-                <div className=" mt-4 "> Tài Khoản của bạn </div>
-                <div className="  font-serif" >Chào mừng trở lại, {user?.user_metadata.full_name} </div>
-                <div className=" text-sm"> 
-                  <div className=" "> Số điện thọai: {user?.user_metadata.phone} </div>
-                  <div className=" "> Email: {user?.user_metadata.email} </div>
-                </div>
-
-                
-                <SignOut onSignOut={() => {
-                  setUser(null);
-                  setAuth?.(false); // Update parent/global state if needed
-                  setMobileMenuOpen(false);
-                  console.log("User signed out");
-                }} />
-                </div>
-                
-                }
-                
+          
+        
 
               </nav>
             </motion.div>
           </AnimatePresence>
 
         )}
-        {/* Mobile Cart Bar */}
-        {isCartOpen && 
-          <Cart isAuth={isAuth} setOpenAuthModal={setOpenAuthModal} products={products} isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} profile={profile} setProfile={setProfile} />
-        }
 
         {searchOpen && (
         <AnimatePresence>

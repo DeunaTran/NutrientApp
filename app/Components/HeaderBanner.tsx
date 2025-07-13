@@ -8,30 +8,29 @@ import SignOut from "./SignOut";
 import { IoCartOutline } from "react-icons/io5";
 import {  type AuthenticateProps, type Product } from "~/library/interface";
 import { Link } from "react-router";
-import { Cart } from "./Cart";
 import { motion, AnimatePresence } from "framer-motion";
 
 
 
-const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, products, isCartOpen, setIsCartOpen }: AuthenticateProps) => {
+const HeaderBanner = ({ setOpenAuthModal }: AuthenticateProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) {
         setUser(data.user);
         console.log("User:", data.user);
-        console.log("Profile in header space:", profile);
+        setIsAuth(true);
       }
       else {
         console.log("No user is in header space.");
       }
     });
     setMobileMenuOpen(false);
-    // setIsCartOpen(false);
     setSearchOpen(false);
   }, [isAuth]);
 
@@ -137,17 +136,7 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
 
         {/* Icons - Hidden on mobile */}
         <div className="col-span-1 hidden md:flex justify-start items-center space-x-4">
-          {/* <FaShoppingCart
-            color="gray"
-            size={25}
-            className="hover:cursor-pointer hover:scale-110 transition-transform duration-200"
-          />
-          <IoIosHeart
-            color="gray"
-            size={25}
-            className="hover:cursor-pointer hover:scale-110 transition-transform duration-200"
-          /> */}
-          <button onClick={() => { setIsCartOpen(!isCartOpen) }}>
+          <button onClick={() => { }}>
               <IoCartOutline color="gray" size={22} />
             </button>
             
@@ -177,7 +166,7 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
               {searchOpen ? <FaTimes color="gray" size={22} /> : <CiSearch color="gray" size={22} />}
             </button>
 
-            <button onClick={() => { setIsCartOpen(!isCartOpen) }}>
+            <button onClick={() => {}}>
               <IoCartOutline color="gray" size={22} />
             </button>
             
@@ -231,7 +220,6 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
                 
                 <SignOut onSignOut={() => {
                   setUser(null);
-                  setAuth?.(false); // Update parent/global state if needed
                   setMobileMenuOpen(false);
                   console.log("User signed out");
                 }} />
@@ -245,10 +233,6 @@ const HeaderBanner = ({ isAuth, setOpenAuthModal, setAuth, setProfile, profile, 
           </AnimatePresence>
 
         )}
-        {/* Mobile Cart Bar */}
-        {isCartOpen && 
-          <Cart isAuth={isAuth} setOpenAuthModal={setOpenAuthModal} products={products} isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} profile={profile} setProfile={setProfile} />
-        }
 
         {searchOpen && (
         <AnimatePresence>

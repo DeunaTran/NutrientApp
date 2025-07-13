@@ -1,31 +1,34 @@
-// Define the product structure
-export interface Product {
-  id: number;
-  name: string;
-  sale: string;
-  price: number;
-  img: string;
-  img2: string;
-  description: string;
-  imgList: string[];
-  nickname: string;
-  introduction: string;
-  code: string;
-  sideInfo: Record<string, string>;
-}
-export interface Order {
+
+export interface Nutrient {
   id: number;
   created_at: string; // ISO timestamp
-  user_id: string;
-  cart: Record<string, any>; // You can replace `any` with a more specific type if known
-  payment: string;
-  cost: number;
-  address: string;
-  full_name: string;
-  phone: string;
-  status: string;
-  email: string;
-  tracking_order_code: string;
+  session_id: string;
+  longitude: number; // <-- corrected spelling too
+  latitude: number;
+  nitrogen: number;
+  phosphorus: number;
+  potassium: number;
+  moisture: number;
+  altitude?: number; // optional if not always present
+}
+export type GridResult = {
+  matrix: string[][];
+  numRows: number;
+  numCols: number;
+  north: number;
+  south: number;
+  west: number;
+  east: number;
+};
+export interface NutrientGuide {
+  crop: string;
+  minNitrogen: number;
+  maxNitrogen: number;
+  minPhosphorus: number;
+  maxPhosphorus: number;
+  minPotassium: number;
+  maxPotassium: number;
+  note?: string; // Optional
 }
 
 export interface Stock {
@@ -35,61 +38,80 @@ export interface Stock {
   XXL: number;
 }
 
-export interface Review {
-  id: number;
-  created_at: string; // ISO 8601 format (e.g., "2025-06-06T12:00:00Z")
-  user_id: string; // UUID
-  product: Record<string, CartItem>; // or define a specific type if product schema is known
-  age: number;
-  full_name: string;
-  height: number;
-  weight: number;
-  province: string;
-  activity: string;
-  workout_frequency: string;
-  star: number;
-  review: string;
-  isApproved: boolean;
-  title: string;
-}
 
-export type User = {
-  id: string;
-  user_metadata: {
-    email?: string;
-    phone?: string;
-    [key: string]: any;
-  };
-  [key: string]: any;
-};
-export type Influencer = {
-  full_name: string;
-  code: string;
-  nickname: string;
-}
 
-export interface CartItem {
-  quantity: number;
-  color: string;
-}
-// Define the user profile structure
 export interface UserProfile {
-  cart: Record<string, CartItem>;
   created_at: string;
   user_id: string;
-  address?: string; // Optional address field
+  land_ids: number[];
 }
+
+export interface SupabaseUserLite {
+  id: string;
+  email: string;
+  full_name?: string;
+  phone?: string;
+  app_metadata?: any;
+  user_metadata?: any;
+  created_at?: string;
+}
+
+export interface PolygonData {
+  coords: LatLng[];
+  area: number;
+}
+
+export type LatLng = [number, number];
+
+export interface Land {
+  id: string;
+  created_at: string;
+  name: string;
+  area: number;
+  polygon: PolygonData[];
+  crop: string;
+}
+
+export  type NPKMmatrix = {
+  nitrogen: number;
+  phosphorus: number;
+  potassium: number;
+  moisture: number;
+}
+
 
 
 // Props for authentication-related components
 export interface AuthenticateProps {
-  isAuth: boolean;
   setOpenAuthModal: () => void;
-  setAuth?: (isAuth: boolean) => void;
-  setProfile: (profile: UserProfile ) => void;
-  profile: UserProfile ;
-  products?: Product[];
-  // setCartOpen?: (open: boolean) => void;
-  isCartOpen: boolean;
-  setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+
+export type session = {
+  session_id: string;
+  land_id: string | null;
+}
+
+ export type Location = {
+  formatted: string;
+  components: {
+    city?: string;
+    town?: string;
+    village?: string;
+    suburb?: string;
+    state?: string;
+    province?: string;
+    county?: string;
+    country: string;
+    country_code: string;
+    postcode?: string;
+    road?: string;
+    neighbourhood?: string;
+    municipality?: string;
+    state_district?: string;
+    continent?: string;
+    house_number?: string;
+    [key: string]: any; // for any additional fields OpenCage may return
+  };
+};
+
