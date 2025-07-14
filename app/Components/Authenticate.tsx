@@ -113,8 +113,8 @@ const handleAuth = async () => {
 
             <p className="mt-2 text-sm/6 text-white/50">
               {isRegister
-                ? 'Tạo tài khoản mới để sử dụng GapZ.'
-                : 'Hãy nhập email và mật khẩu của bạn để đăng nhập vào tài khoản GapZ.'}
+                ? 'Tạo tài khoản mới để sử dụng dịch vụ.'
+                : 'Hãy nhập email và mật khẩu của bạn để đăng nhập'}
             </p>
 
             <form

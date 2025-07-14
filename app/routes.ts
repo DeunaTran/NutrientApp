@@ -7,4 +7,5 @@ export default [
   route("tracuu", "routes/lookup.tsx"),
   route("linkkien", "routes/linhkien.tsx"),
   route("nghiencuu", "routes/research.tsx"),
+  route("sanpham", "routes/sanpham.tsx"),
 ] satisfies RouteConfig;

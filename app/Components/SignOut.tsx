@@ -26,7 +26,7 @@ export default function SignOut({ onSignOut }: SignOutProps) {
     <>
       <button
         onClick={open}
-        className="text-black font-light py-1 underline   w-full text-left"
+        className="text-black font-light py-1 underline cursor-pointer  w-full text-left"
       >
         Đăng xuất
       </button>

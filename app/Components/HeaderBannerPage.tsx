@@ -6,6 +6,7 @@ import { IoCartOutline } from "react-icons/io5";
 import {  type AuthenticateProps} from "~/library/interface";
 import { Link } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
+import SignOut from "./SignOut";
 
 
 
@@ -109,9 +110,7 @@ const HeaderBannerPage = ({ setOpenAuthModal }: AuthenticateProps) => {
 
         {/* Icons - Computer */}
         <div className="col-span-1 hidden md:flex justify-start items-center space-x-4">
-          <button onClick={() => { }}>
-              <IoCartOutline color="gray" size={22} />
-            </button>
+          <SignOut/>
             
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                <FaBars color="gray" size={22} />
